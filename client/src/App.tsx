@@ -1,17 +1,18 @@
 import React from 'react';
-import Header from "./components/Header/Header"
+import Header from "./components/Header/Header";
 import Footer from './components/Footer/Footer';
 import Categories from './components/Categories/Categories';
-import CategoriesSlider from './components/CategoriesSlider/CategoriesSlider';
+import Router from './routes/Router';
+import { BrowserRouter } from 'react-router-dom';
 
 const App: React.FC = () => {
   return (
-    <div>
+    <BrowserRouter>
       <Header />
       <Categories />
-      <CategoriesSlider />
+      <Router />
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 
