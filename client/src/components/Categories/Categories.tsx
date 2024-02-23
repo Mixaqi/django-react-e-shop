@@ -1,35 +1,36 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
+import {Link} from 'react-router-dom'
 
 const Categories: React.FC = () => {
     return (
         <Nav className="bg-white text-dark">
             <Nav.Item>
-                <Nav.Link href="#ssd">SSD</Nav.Link>
+                <Nav.Link as={Link} to="/ssd">SSD</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#hdd">HDD</Nav.Link>
+                <Nav.Link as={Link} to="/hdd">HDD</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#gpu">GPU</Nav.Link>
+                <Nav.Link as={Link} to="/gpu">GPU</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#cpu">CPU</Nav.Link>
+                <Nav.Link as={Link} to="/cpu">CPU</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#psu">PSU</Nav.Link>
+                <Nav.Link as={Link} to="/psu">PSU</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#ram">RAM</Nav.Link>
+                <Nav.Link as={Link} to="/ram">RAM</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#motherboards">Motherboards</Nav.Link>
+                <Nav.Link as={Link} to="/motherboard">MotherBoard</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#cooling">Cooling</Nav.Link>
+                <Nav.Link as={Link} to="/cooling">Cooling</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link href="#cases">Cases</Nav.Link>
+                <Nav.Link as={Link} to="/cases">Cases</Nav.Link>
             </Nav.Item>
         </Nav>
     );
