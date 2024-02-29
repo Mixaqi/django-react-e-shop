@@ -4,16 +4,24 @@ import { RegistrationFormData } from "./register.interface";
 
 const Register = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    watch
   } = useForm<RegistrationFormData>({
     mode: "onChange",
   });
+
   const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
     reset();
+  };
+
+  const passwordMatchValidator = (confirmedPassword: string) => {
+    return confirmedPassword === watch("password") || "Passwords should match!";
   };
 
   return (
@@ -22,7 +30,7 @@ const Register = () => {
         <div className="mb-3">
           <input
             {...register("username", {
-              required: "Username is required field!",
+              required: "Username is required field!"
             })}
             className="form-control"
             placeholder="Username"
@@ -54,6 +62,10 @@ const Register = () => {
             <input
               {...register("password", {
                 required: "Password is required field!",
+                pattern: {
+                  value: PASSWORD_REGEX,
+                  message: "Please enter a valid password",
+                },
               })}
               className="form-control"
               type="password"
@@ -67,6 +79,7 @@ const Register = () => {
             <input
               {...register("confirmedPassword", {
                 required: "Confirmed password is required field!",
+                validate: passwordMatchValidator
               })}
               className="form-control"
               type="password"
