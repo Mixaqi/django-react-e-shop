@@ -1,10 +1,8 @@
-import React from 'react'
-import CategoriesSlider from '../components/CategoriesSlider/CategoriesSlider'
+import React from "react";
+import CategoriesSlider from "../components/CategoriesSlider/CategoriesSlider";
 
 const Home: React.FC = () => {
-  return (
-    <CategoriesSlider />
-  )
-}
+  return <CategoriesSlider />;
+};
 
-export default Home
+export default Home;

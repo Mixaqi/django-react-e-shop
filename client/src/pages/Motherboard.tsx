@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Motherboard = (props: Props) => {
-  return (
-    <div>Motherboard</div>
-  )
-}
+  return <div>Motherboard</div>;
+};
 
-export default Motherboard
+export default Motherboard;

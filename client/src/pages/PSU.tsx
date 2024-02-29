@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const PSU = (props: Props) => {
-  return (
-    <div>PSU</div>
-  )
-}
+  return <div>PSU</div>;
+};
 
-export default PSU
+export default PSU;

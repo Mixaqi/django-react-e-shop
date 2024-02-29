@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const HDD = (props: Props) => {
-  return (
-    <div>HDD</div>
-  )
-}
+  return <div>HDD</div>;
+};
 
-export default HDD
+export default HDD;

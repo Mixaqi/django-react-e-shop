@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const RAM = (props: Props) => {
-  return (
-    <div>RAM</div>
-  )
-}
+  return <div>RAM</div>;
+};
 
-export default RAM
+export default RAM;

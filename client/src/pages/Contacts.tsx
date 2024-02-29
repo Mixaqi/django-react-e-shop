@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Contacts: React.FC = () => {
-  return (
-    <div>Contacts</div>
-  )
-}
+  return <div>Contacts</div>;
+};
 
-export default Contacts
+export default Contacts;

@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Cases = (props: Props) => {
-  return (
-    <div>Cases</div>
-  )
-}
+  return <div>Cases</div>;
+};
 
-export default Cases
+export default Cases;

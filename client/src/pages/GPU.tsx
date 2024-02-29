@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const GPU = (props: Props) => {
-  return (
-    <div>GPU</div>
-  )
-}
+  return <div>GPU</div>;
+};
 
-export default GPU
+export default GPU;

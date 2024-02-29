@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const CPU = (props: Props) => {
-  return (
-    <div>CPU</div>
-  )
-}
+  return <div>CPU</div>;
+};
 
-export default CPU
+export default CPU;

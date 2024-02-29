@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const SSD = (props: Props) => {
-  return (
-    <div>SSD</div>
-  )
-}
+  return <div>SSD</div>;
+};
 
-export default SSD
+export default SSD;
