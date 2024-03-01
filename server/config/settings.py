@@ -175,3 +175,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "authentication.User"
+# CORS_ALLOWED_ORIGINS = [
+#     os.environ.get("HOST_1"),
+# ]
+CORS_ALLOW_ALL_ORIGINS = True

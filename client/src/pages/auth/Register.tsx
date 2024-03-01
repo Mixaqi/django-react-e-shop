@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegistrationFormData } from "./register.interface";
+import { registerUser } from "../../utils/axios";
 
 const Register = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,8 +17,15 @@ const Register = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<RegistrationFormData> = (data) => {
-    reset();
+  const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
+    try{
+      await registerUser(data)
+      alert('Registration successful')
+      reset();
+    }catch(error){
+      alert('Registration failed. Pls try again')
+      console.error(error)
+    }
   };
 
   const passwordMatchValidator = (confirmedPassword: string) => {
