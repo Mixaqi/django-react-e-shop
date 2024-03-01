@@ -6,17 +6,21 @@ import Router from "./routes/Router";
 import { BrowserRouter } from "react-router-dom";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Header />
-      <Categories />
-      <Router />
-      <Register />
-      <Login />
-      <Footer />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <Categories />
+        <Router />
+        <Register />
+        <Login />
+        <Footer />
+      </BrowserRouter>
+    </Provider>
   );
 };
 

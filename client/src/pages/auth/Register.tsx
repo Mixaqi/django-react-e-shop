@@ -5,26 +5,27 @@ import { registerUser } from "../../utils/axios";
 
 const Register: React.FC = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+  const PASSWORD_REGEX =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-    watch
+    watch,
   } = useForm<RegistrationFormData>({
     mode: "onChange",
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
-    try{
-      await registerUser(data)
-      alert('Registration successful')
+    try {
+      await registerUser(data);
+      alert("Registration successful");
       reset();
-    }catch(error){
-      alert('Registration failed. Pls try again')
-      console.error(error)
+    } catch (error) {
+      alert("Registration failed. Pls try again");
+      console.error(error);
     }
   };
 
@@ -38,7 +39,7 @@ const Register: React.FC = () => {
         <div className="mb-3">
           <input
             {...register("username", {
-              required: "Username is required field!"
+              required: "Username is required field!",
             })}
             className="form-control"
             placeholder="Username"
@@ -87,20 +88,24 @@ const Register: React.FC = () => {
             <input
               {...register("confirmedPassword", {
                 required: "Confirmed password is required field!",
-                validate: passwordMatchValidator
+                validate: passwordMatchValidator,
               })}
               className="form-control"
               type="password"
               placeholder="Confirmed Password"
             />
             {errors?.confirmedPassword && (
-              <div className="text-danger">{errors.confirmedPassword.message}</div>
+              <div className="text-danger">
+                {errors.confirmedPassword.message}
+              </div>
             )}
           </div>
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary mt-3">Register</button>
+          <button type="submit" className="btn btn-primary mt-3">
+            Register
+          </button>
         </div>
       </form>
     </div>
