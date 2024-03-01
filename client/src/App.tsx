@@ -5,6 +5,7 @@ import Categories from "./components/Categories/Categories";
 import Router from "./routes/Router";
 import { BrowserRouter } from "react-router-dom";
 import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
       <Categories />
       <Router />
       <Register />
+      <Login />
       <Footer />
     </BrowserRouter>
   );

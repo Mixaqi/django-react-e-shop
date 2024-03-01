@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { RegistrationFormData } from "./register.interface";
 import { registerUser } from "../../utils/axios";
 
-const Register = () => {
+const Register: React.FC = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
