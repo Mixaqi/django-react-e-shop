@@ -28,12 +28,8 @@ const Header: React.FC = () => {
             </Nav.Link>
           </Nav>
           <Nav>
-          <Link to="/register">
-            <Button variant="outline-light" onClick={() => dispatch(openModal())} >Sign In</Button>
-          </Link>
-            <Link to="/login">
-              <Button variant="outline-success" onClick={() => dispatch(openModal())} >Login</Button>
-            </Link>
+            <Button variant="outline-light" onClick={() => dispatch(openModal('register'))} >Sign In</Button>
+              <Button variant="outline-success" onClick={() => dispatch(openModal('login'))} >Login</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>

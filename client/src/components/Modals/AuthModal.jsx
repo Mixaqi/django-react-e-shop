@@ -1,26 +1,21 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import Login from "../../pages/auth/Login";
 import Register from "../../pages/auth/Register";
-import { openModal, closeModal } from "../../store/slices/modalSlice";
+import { closeModal, setModalMode } from "../../store/slices/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const AuthModal = () => {
-  const [activePage, setActivePage] = useState("login");
-  const { isOpen } = useSelector((store) => store.modal);
+  const { isOpen, mode } = useSelector((store) => store.modal);
   const dispatch = useDispatch();
 
   const togglePage = (page) => {
-    setActivePage(page);
+    dispatch(setModalMode(page));
   };
 
   const handleClose = () => {
     dispatch(closeModal());
-  };
-
-  const handleOpen = () => {
-    dispatch(openModal());
   };
 
   return (
@@ -32,19 +27,19 @@ const AuthModal = () => {
         <Modal.Body>
           <div>
             <button
-              className={`btn btn-outline-${activePage === "register" ? "success" : "primary"}`}
+              className={`btn btn-outline-${mode === "register" ? "success" : "primary"}`}
               onClick={() => togglePage("register")}
             >
               Register
             </button>
             <button
-              className={`btn btn-outline-${activePage === "login" ? "success" : "primary"}`}
+              className={`btn btn-outline-${mode === "login" ? "success" : "primary"}`}
               onClick={() => togglePage("login")}
             >
               Login
             </button>
           </div>
-          {activePage === "register" ? <Register /> : <Login />}
+          {mode === "register" ? <Register /> : <Login />}
         </Modal.Body>
       </Modal>
     </div>
