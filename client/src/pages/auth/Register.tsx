@@ -2,18 +2,21 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegistrationFormData } from "./register.interface";
 import { registerUser } from "../../utils/axios";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../store/slices/modalSlice";
 
 const Register: React.FC = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+  const dispatch = useDispatch()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     watch,
+    reset,
   } = useForm<RegistrationFormData>({
     mode: "onChange",
   });
@@ -22,7 +25,8 @@ const Register: React.FC = () => {
     try {
       await registerUser(data);
       alert("Registration successful");
-      reset();
+      dispatch(closeModal());
+      reset()
     } catch (error) {
       alert("Registration failed. Pls try again");
       console.error(error);
@@ -103,7 +107,7 @@ const Register: React.FC = () => {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary mt-3">
+          <button type="submit" className="btn btn-primary" >
             Register
           </button>
         </div>

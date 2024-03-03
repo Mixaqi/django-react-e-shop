@@ -9,7 +9,7 @@ export interface ServerResponse {
   message: string;
 }
 
-export interface UserLoginData{
+export interface UserLoginData {
   email: string;
   password: string;
 }

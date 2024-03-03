@@ -2,21 +2,28 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "./login.interface";
 import { loginUser } from "../../utils/axios";
+import { closeModal } from "../../store/slices/modalSlice";
+import { useDispatch } from "react-redux";
 
 const Login: React.FC = () => {
+
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<LoginFormData>();
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-        await loginUser(data);
-        alert('Login succesful')
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      await loginUser(data);
+      alert("Login successful");
+      dispatch(closeModal());
+      reset()
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

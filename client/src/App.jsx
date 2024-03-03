@@ -1,26 +1,22 @@
-import React from "react";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Categories from "./components/Categories/Categories";
 import Router from "./routes/Router";
+import AuthModal from "./components/Modals/AuthModal";
 import { BrowserRouter } from "react-router-dom";
-import Register from "./pages/auth/Register";
-import Login from "./pages/auth/Login";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { useSelector } from "react-redux";
 
-const App: React.FC = () => {
+const App = () => {
+  const { isOpen } = useSelector((store) => store.modal);
+
   return (
-    <Provider store={store}>
       <BrowserRouter>
+        {isOpen && <AuthModal />}
         <Header />
         <Categories />
         <Router />
-        <Register />
-        <Login />
         <Footer />
       </BrowserRouter>
-    </Provider>
   );
 };
 

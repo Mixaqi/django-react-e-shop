@@ -1,5 +1,9 @@
 import axios, { AxiosResponse } from "axios";
-import { UserRegistrationData, ServerResponse, UserLoginData } from "./userData.interface";
+import {
+  UserRegistrationData,
+  ServerResponse,
+  UserLoginData,
+} from "./userData.interface";
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL, // Замените на базовый URL вашего сервера
