@@ -9,7 +9,7 @@ const Register: React.FC = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -26,7 +26,7 @@ const Register: React.FC = () => {
       await registerUser(data);
       alert("Registration successful");
       dispatch(closeModal());
-      reset()
+      reset();
     } catch (error) {
       alert("Registration failed. Pls try again");
       console.error(error);
@@ -107,7 +107,7 @@ const Register: React.FC = () => {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary" >
+          <button type="submit" className="btn btn-primary">
             Register
           </button>
         </div>

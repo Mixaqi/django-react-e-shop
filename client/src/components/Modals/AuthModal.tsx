@@ -1,16 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
 import { Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import Login from "../../pages/auth/Login";
 import Register from "../../pages/auth/Register";
+import { useAppSelector } from "../../store/hooks";
 import { closeModal, setModalMode } from "../../store/slices/modalSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/store";
 
 const AuthModal = () => {
-  const { isOpen, mode } = useSelector((store) => store.modal);
-  const dispatch = useDispatch();
+  const { isOpen, mode } = useAppSelector((store) => store.modal);
+  const dispatch: AppDispatch = useDispatch()
 
-  const togglePage = (page) => {
+  const togglePage = (page: "register" | "login") => {
     dispatch(setModalMode(page));
   };
 
@@ -21,7 +22,7 @@ const AuthModal = () => {
   return (
     <div>
       <Modal show={isOpen} onHide={handleClose}>
-        <Modal.Header closeButton={handleClose}>
+        <Modal.Header closeButton>
           <Modal.Title>Auth Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>

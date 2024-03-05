@@ -21,7 +21,7 @@ const modalSlice = createSlice({
     closeModal: (state) => {
       state.isOpen = false;
     },
-    setModalMode: (state, action) => {
+    setModalMode: (state, action: PayloadAction<"register" | "login">) => {
       state.mode = action.payload;
     },
   },

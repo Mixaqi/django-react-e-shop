@@ -6,8 +6,7 @@ import { closeModal } from "../../store/slices/modalSlice";
 import { useDispatch } from "react-redux";
 
 const Login: React.FC = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -20,7 +19,7 @@ const Login: React.FC = () => {
       await loginUser(data);
       alert("Login successful");
       dispatch(closeModal());
-      reset()
+      reset();
     } catch (error) {
       console.error("Error:", error);
     }

@@ -4,19 +4,20 @@ import Categories from "./components/Categories/Categories";
 import Router from "./routes/Router";
 import AuthModal from "./components/Modals/AuthModal";
 import { BrowserRouter } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "./store/hooks";
+import { RootState } from "./store/store";
 
-const App = () => {
-  const { isOpen } = useSelector((store) => store.modal);
+const App: React.FC = () => {
+  const { isOpen } = useAppSelector((state:RootState) => state.modal);
 
   return (
-      <BrowserRouter>
-        {isOpen && <AuthModal />}
-        <Header />
-        <Categories />
-        <Router />
-        <Footer />
-      </BrowserRouter>
+    <BrowserRouter>
+      {isOpen && <AuthModal />}
+      <Header />
+      <Categories />
+      <Router />
+      <Footer />
+    </BrowserRouter>
   );
 };
 
