@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "./login.interface";
-import { loginUser } from "../../utils/axios";
 import { closeModal } from "../../store/slices/modalSlice";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { useLoginUserMutation } from "../../app/api/authApi";
+import { setUser, IUser } from "../../store/slices/authSlice";
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const [
+    loginUser,
+    {
+      data: loginMutationResult,
+      isSuccess: isLoginSuccess,
+      isError: isLoginError,
+      error: loginError,
+    },
+  ] = useLoginUserMutation();
+
+  const handleLogin = async (formData: LoginFormData) => {
+    const { email, password } = formData;
+    if (email && password) {
+      await loginUser({ email, password });
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -16,10 +35,16 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-      await loginUser(data);
-      alert("Login successful");
-      dispatch(closeModal());
-      reset();
+      await handleLogin(data);
+      console.log("Login success:", loginMutationResult); // Проверка успешного логина в консоли
+      if (isLoginSuccess && loginMutationResult) {
+        console.log("Dispatching setUser"); // Проверка перед вызовом dispatch
+
+        dispatch(closeModal());
+        reset();
+      } else {
+        console.log("Login failed:", loginError); // Проверка ошибки логина в консоли
+      }
     } catch (error) {
       console.error("Error:", error);
     }

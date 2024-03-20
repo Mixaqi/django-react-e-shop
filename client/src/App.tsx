@@ -8,7 +8,7 @@ import { useAppSelector } from "./store/hooks";
 import { RootState } from "./store/store";
 
 const App: React.FC = () => {
-  const { isOpen } = useAppSelector((state:RootState) => state.modal);
+  const { isOpen } = useAppSelector((state: RootState) => state.modal);
 
   return (
     <BrowserRouter>

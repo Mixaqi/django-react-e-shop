@@ -9,7 +9,7 @@ import { AppDispatch } from "../../store/store";
 
 const AuthModal = () => {
   const { isOpen, mode } = useAppSelector((store) => store.modal);
-  const dispatch: AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
   const togglePage = (page: "register" | "login") => {
     dispatch(setModalMode(page));

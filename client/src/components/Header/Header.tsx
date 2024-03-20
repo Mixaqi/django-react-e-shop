@@ -1,13 +1,13 @@
-import React from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
-import { Navbar, Container, Nav, Button } from "react-bootstrap"
-import { Link } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { openModal, } from "../../store/slices/modalSlice"
-import { AppDispatch } from "../../store/store"
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openModal } from "../../store/slices/modalSlice";
+import { AppDispatch } from "../../store/store";
 
 const Header: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -28,10 +28,10 @@ const Header: React.FC = () => {
               Contacts
             </Nav.Link>
           </Nav>
-          <Nav>
+          <Nav className="authButtons">
             <Button
               variant="outline-light"
-              onClick={() => dispatch(openModal( "register" ))}
+              onClick={() => dispatch(openModal("register"))}
             >
               Sign In
             </Button>
@@ -46,6 +46,6 @@ const Header: React.FC = () => {
       </Container>
     </Navbar>
   );
-}
+};
 
-export default Header
+export default Header;

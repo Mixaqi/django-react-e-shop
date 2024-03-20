@@ -4,12 +4,13 @@ import { RegistrationFormData } from "./register.interface";
 import { registerUser } from "../../utils/axios";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../store/slices/modalSlice";
+import { AppDispatch } from "../../store/store";
 
 const Register: React.FC = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const {
     register,
@@ -23,8 +24,7 @@ const Register: React.FC = () => {
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
-      await registerUser(data);
-      alert("Registration successful");
+      registerUser(data);
       dispatch(closeModal());
       reset();
     } catch (error) {
