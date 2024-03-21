@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { InterfaceType } from "typescript";
+import { IUser } from "../../store/slices/authSlice";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -6,9 +8,9 @@ export const authApi = createApi({
     baseUrl: process.env.REACT_APP_BASE_URL,
   }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<string, { email: string; password: string }>({
+    loginUser: builder.mutation<{access: string, refresh: string, user: IUser}, { email: string; password: string }>({
       query: ({ email, password }) => ({
-        url: '/api/auth/login', // Исправлен адрес для запроса аутентификации
+        url: '/api/auth/login/',
         method: 'POST',
         body: {
           email,

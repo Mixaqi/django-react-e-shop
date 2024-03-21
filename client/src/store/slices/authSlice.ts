@@ -9,28 +9,27 @@ export interface IUser {
 
 interface AuthState {
   user: IUser | null;
-  token: string | null;
+  access: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  access: null,
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<{ user: IUser; token: string }>) => {
+    setUser: (state, action: PayloadAction<{ user: IUser; access: string }>) => {
       localStorage.setItem(
         "user", //REPLACE LOCALSTORAGE TO COOKIES
         JSON.stringify({
-          user: action.payload.user,
-          token: action.payload.token,
+          token: action.payload.access,
         }),
       );
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.access = action.payload.access;
     },
   },
 });

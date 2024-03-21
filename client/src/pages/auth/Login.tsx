@@ -9,22 +9,8 @@ import { setUser, IUser } from "../../store/slices/authSlice";
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const [
-    loginUser,
-    {
-      data: loginMutationResult,
-      isSuccess: isLoginSuccess,
-      isError: isLoginError,
-      error: loginError,
-    },
-  ] = useLoginUserMutation();
+  const [loginUser, { isLoading, isError, isSuccess }] = useLoginUserMutation();
 
-  const handleLogin = async (formData: LoginFormData) => {
-    const { email, password } = formData;
-    if (email && password) {
-      await loginUser({ email, password });
-    }
-  };
 
   const {
     register,
@@ -35,16 +21,10 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-      await handleLogin(data);
-      console.log("Login success:", loginMutationResult); // Проверка успешного логина в консоли
-      if (isLoginSuccess && loginMutationResult) {
-        console.log("Dispatching setUser"); // Проверка перед вызовом dispatch
-
-        dispatch(closeModal());
-        reset();
-      } else {
-        console.log("Login failed:", loginError); // Проверка ошибки логина в консоли
-      }
+      const response = await loginUser(data).unwrap()
+      console.log(response.user)
+      dispatch(closeModal()); // Закрываем модальное окно
+      reset(); // Сбрасываем форму
     } catch (error) {
       console.error("Error:", error);
     }
