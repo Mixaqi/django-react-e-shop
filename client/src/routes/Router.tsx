@@ -11,7 +11,6 @@ import Motherboard from "../pages/Motherboard";
 import PSU from "../pages/PSU";
 import RAM from "../pages/RAM";
 import SSD from "../pages/SSD";
-import AuthModal from "../components/Modals/AuthModal";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 

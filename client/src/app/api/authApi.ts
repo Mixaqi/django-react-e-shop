@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { InterfaceType } from "typescript";
 import { IUser } from "../../store/slices/authSlice";
 
 export const authApi = createApi({

@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegistrationFormData } from "./register.interface";
-import { registerUser } from "../../utils/axios";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../store/slices/modalSlice";
 import { AppDispatch } from "../../store/store";
@@ -24,7 +23,6 @@ const Register: React.FC = () => {
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
-      registerUser(data);
       dispatch(closeModal());
       reset();
     } catch (error) {

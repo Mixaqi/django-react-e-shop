@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "./login.interface";
 import { closeModal } from "../../store/slices/modalSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { useLoginUserMutation } from "../../app/api/authApi";
-import { setUser, IUser } from "../../store/slices/authSlice";
-import { access } from "fs";
+import { setUser} from "../../store/slices/authSlice";
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -22,9 +21,9 @@ const Login: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-      const response = await loginUser(data).unwrap()
-      console.log(response.user)
-      dispatch(setUser({user: response.user, access: response.access}))
+      const response = await loginUser(data).unwrap();
+      console.log(response.user);
+      dispatch(setUser({ user: response.user, access: response.access }));
       dispatch(closeModal()); // Закрываем модальное окно
       reset(); // Сбрасываем форму
     } catch (error) {
