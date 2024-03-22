@@ -1,13 +1,17 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../store/slices/modalSlice";
-import { AppDispatch } from "../../store/store";
+import { logoutUser, selectAuth } from "../../store/slices/authSlice";
 
 const Header: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const { user } = useSelector(selectAuth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -29,18 +33,26 @@ const Header: React.FC = () => {
             </Nav.Link>
           </Nav>
           <Nav className="authButtons">
-            <Button
-              variant="outline-light"
-              onClick={() => dispatch(openModal("register"))}
-            >
-              Sign In
-            </Button>
-            <Button
-              variant="outline-success"
-              onClick={() => dispatch(openModal("login"))}
-            >
-              Login
-            </Button>
+            {user ? (
+              <Button variant="outline-light" onClick={handleLogout}>
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="outline-light"
+                  onClick={() => dispatch(openModal("register"))}
+                >
+                  Sign Up
+                </Button>
+                <Button
+                  variant="outline-success"
+                  onClick={() => dispatch(openModal("login"))}
+                >
+                  Login
+                </Button>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
