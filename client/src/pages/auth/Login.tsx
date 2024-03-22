@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { useLoginUserMutation } from "../../app/api/authApi";
 import { setUser, IUser } from "../../store/slices/authSlice";
+import { access } from "fs";
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -23,6 +24,7 @@ const Login: React.FC = () => {
     try {
       const response = await loginUser(data).unwrap()
       console.log(response.user)
+      dispatch(setUser({user: response.user, access: response.access}))
       dispatch(closeModal()); // Закрываем модальное окно
       reset(); // Сбрасываем форму
     } catch (error) {
