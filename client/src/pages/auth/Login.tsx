@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginFormData } from "./login.interface";
 import { closeModal } from "../../store/slices/modalSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { useLoginUserMutation } from "../../app/api/authApi";
-import { setUser} from "../../store/slices/authSlice";
+import { setUser } from "../../store/slices/authSlice";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [loginUser, { isLoading, isError, isSuccess }] = useLoginUserMutation();
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -24,17 +25,22 @@ const Login: React.FC = () => {
       const response = await loginUser(data).unwrap();
       console.log(response.user);
       dispatch(setUser({ user: response.user, access: response.access }));
-      dispatch(closeModal()); // Закрываем модальное окно
-      reset(); // Сбрасываем форму
+      dispatch(closeModal());
+      reset();
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
+  const togglePasswordVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   return (
     <div className="container">
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <div className="mb-3">
+        <div className="mb-3 d-flex align-items-center">
           <input
             {...register("email", {
               required: "Email is required",
@@ -51,18 +57,25 @@ const Login: React.FC = () => {
             <div className="text-danger">{errors.email.message}</div>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 d-flex align-items-center">
           <input
             {...register("password", {
               required: "Password is required",
             })}
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             className="form-control"
           />
           {errors.password && (
             <div className="text-danger">{errors.password.message}</div>
           )}
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="password-toggle-button ms-2"
+          >
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
+          </button>
         </div>
         <button type="submit" className="btn btn-primary">
           Login
