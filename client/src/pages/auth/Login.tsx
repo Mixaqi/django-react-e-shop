@@ -11,7 +11,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const [loginUser, { isLoading, isError, isSuccess }] = useLoginUserMutation();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
     register,
@@ -23,7 +23,7 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await loginUser(data).unwrap();
-      console.log(response.user);
+      // console.log(response.user);
       dispatch(setUser({ user: response.user, access: response.access }));
       dispatch(closeModal());
       reset();
@@ -77,8 +77,13 @@ const Login: React.FC = () => {
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </button>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Login
+        {isError && (
+          <div className="alert alert-danger" role="alert">
+            Сheck input data
+          </div>
+        )}
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

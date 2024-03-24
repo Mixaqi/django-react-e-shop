@@ -2,17 +2,21 @@ import React from "react";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Contacts from "../pages/Contacts";
-import Cases from "../pages/Cases";
-import Cooling from "../pages/Cooling";
-import CPU from "../pages/CPU";
-import GPU from "../pages/GPU";
-import HDD from "../pages/HDD";
-import Motherboard from "../pages/Motherboard";
-import PSU from "../pages/PSU";
-import RAM from "../pages/RAM";
-import SSD from "../pages/SSD";
+import Cases from "../pages/hardware/Cases";
+import Cooling from "../pages/hardware/Cooling";
+import CPU from "../pages/hardware/CPU";
+import GPU from "../pages/hardware/GPU";
+import HDD from "../pages/hardware/HDD";
+import Motherboard from "../pages/hardware/Motherboard";
+import PSU from "../pages/hardware/PSU";
+import RAM from "../pages/hardware/RAM";
+import SSD from "../pages/hardware/SSD";
+import Dashboard from "../pages/Dashboard";
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import NotFound from "../pages/NotFound";
+
 
 const Router: React.FC = () => {
   return (
@@ -29,7 +33,15 @@ const Router: React.FC = () => {
       <Route path="/motherboard" element={<Motherboard />} />
       <Route path="/cooling" element={<Cooling />} />
       <Route path="/cases" element={<Cases />} />
-      <Route path="/*" element={<Navigate to="/" />} />
+      <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+      <Route path="*" element={<NotFound/>} />
     </Routes>
   );
 };
