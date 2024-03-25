@@ -7,7 +7,7 @@ export const authApi = createApi({
     baseUrl: process.env.REACT_APP_BASE_URL,
   }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<{access: string, refresh: string, user: IUser}, { email: string; password: string }>({
+    loginUser: builder.mutation<{ access: string, refresh: string, user: IUser }, { email: string; password: string }>({
       query: ({ email, password }) => ({
         url: '/api/auth/login/',
         method: 'POST',
@@ -17,7 +17,17 @@ export const authApi = createApi({
         },
       }),
     }),
+    registerUser: builder.mutation<{ access: string, refresh: string, user: IUser }, { username: string, email: string; password: string }>({
+      query: ({ username, email, password }) => ({
+        url: '/api/auth/register/',
+        method: 'POST',
+        body: {
+          username,
+          email,
+          password,
+        }
+      }),
+    }),
   }),
 });
-
-export const { useLoginUserMutation } = authApi;
+export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
