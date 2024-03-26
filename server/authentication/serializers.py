@@ -3,10 +3,9 @@ from __future__ import annotations
 from authentication.models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
-from django.core.exceptions import ObjectDoesNotExist
 from typing import Any
+from django.db import IntegrityError
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,21 +51,9 @@ class RegisterSerializer(UserSerializer):
 
     def create(self, validated_data: dict[str, Any]) -> type[User]:
         try:
-            user = User.objects.get(email=validated_data["email"])
-        except ObjectDoesNotExist:
             user = User.objects.create_user(**validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({'email': 'This email is already taken.'})
         return user
-    
-    # def create(self, validated_data: dict[str, Any])-> type[User]:
-    #     email = validated_data.get('email')
-    #     username = validated_data.get('username')
-    #     errors = {}
-    #     if User.objects.filter(email=email).exists():
-    #         errors['email'] = 'User with this email already exists'
-    #     if User.objects.filter(username=username).exists():
-    #          errors['username'] = 'User with this username already exists'
-             
-    #     user = User.objects.create_user(**validated_data)
-    #     return user
-        
+
     

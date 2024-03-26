@@ -34,7 +34,7 @@ export const authSlice = createSlice({
     logoutUser: (state) => {
       localStorage.clear()
       state.user = null
-      state.access =null
+      state.access = null
     }
   },
 });

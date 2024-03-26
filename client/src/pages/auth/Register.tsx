@@ -27,11 +27,11 @@ const Register: React.FC = () => {
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
       const response = await registerUser(data).unwrap();
+      console.log(response.access)
       dispatch(setUser({ user: response.user, access: response.access }));
       dispatch(closeModal());
       reset();
     } catch (error) {
-      alert("Registration failed. Pls try again");
       console.error(error);
     }
   };
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
           )}
         </div>
 
-        <div className="row g-2">
+        <div className="row g-2 mb-2">
           <div className="col">
             <input
               {...register("password", {
@@ -108,10 +108,15 @@ const Register: React.FC = () => {
             )}
           </div>
         </div>
+        {isError && (
+          <div className="alert alert-danger" role="alert">
+            this email already taken
+          </div>
+        )}
 
         <div>
-          <button type="submit" className="btn btn-primary">
-            Register
+          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+            {isLoading ? "Registration ..." : "Register"}
           </button>
         </div>
       </form>
