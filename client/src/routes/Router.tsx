@@ -11,11 +11,12 @@ import Motherboard from "../pages/hardware/Motherboard";
 import PSU from "../pages/hardware/PSU";
 import RAM from "../pages/hardware/RAM";
 import SSD from "../pages/hardware/SSD";
-import Dashboard from "../pages/Dashboard";
+import Unauthorized from "../pages/auth/Unauthorized"
 
 import { Routes, Route } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
 import NotFound from "../pages/NotFound";
+import Dashboard from "../pages/Dashboard";
+import PrivateRoute from "./PrivateRoute";
 
 
 const Router: React.FC = () => {
@@ -33,14 +34,12 @@ const Router: React.FC = () => {
       <Route path="/motherboard" element={<Motherboard />} />
       <Route path="/cooling" element={<Cooling />} />
       <Route path="/cases" element={<Cases />} />
-      <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route 
+        path="/dashboard" 
+        element={<PrivateRoute component={Dashboard}/>}
+      />
+
       <Route path="*" element={<NotFound/>} />
     </Routes>
   );

@@ -1,20 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate, Route} from 'react-router-dom';
-import { selectAuth } from '../store/slices/authSlice';
+import { Navigate } from 'react-router-dom';
 
-interface PrivateRouteProps{
-  children: React.ReactNode;
+interface PrivateRouteProps {
+  isAuthenticated?: string | null;
+  component: React.ComponentType<any>;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, ...rest }) => {
-  const { user } = useSelector(selectAuth);
-
-  return user ? (
-    <Route {...rest}>{children}</Route>
-  ) : (
-    <Navigate to="/" />
-  );
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isAuthenticated }) => {
+  isAuthenticated = localStorage.getItem("user")
+  if (isAuthenticated) {
+    return <Component />;
+  } else {
+    return <Navigate to="/unauthorized" />;
+  }
 };
 
 export default PrivateRoute;
