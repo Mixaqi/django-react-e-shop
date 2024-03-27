@@ -8,7 +8,7 @@ import { useRegisterUserMutation } from "../../app/api/authApi";
 import { setUser } from "../../store/slices/authSlice";
 
 const Register: React.FC = () => {
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
   const PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
   const dispatch: AppDispatch = useDispatch();
@@ -27,7 +27,6 @@ const Register: React.FC = () => {
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
       const response = await registerUser(data).unwrap();
-      console.log(response.access)
       dispatch(setUser({ user: response.user, access: response.access }));
       dispatch(closeModal());
       reset();

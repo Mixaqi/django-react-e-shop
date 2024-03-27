@@ -23,7 +23,6 @@ const Login: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await loginUser(data).unwrap();
-      console.log(response.access);
       dispatch(setUser({ user: response.user, access: response.access }));
       dispatch(closeModal());
       reset();
