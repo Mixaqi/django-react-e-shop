@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import Cookies from "js-cookie"
 
 export interface IUser {
   id: number;
@@ -10,18 +11,27 @@ export interface IUser {
 interface AuthState {
   user: IUser | null;
   access: string | null;
+  refresh: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
   access: null,
+  refresh: null,
 };
 
 export const setUser = createAsyncThunk(
   "auth/setUser",
-  async ({ user, access }: { user: IUser; access: string }) => {
+  async ({ user, access, refresh }: { user: IUser; access: string; refresh: string }) => {
     localStorage.setItem("access", access);
-    return { user, access };
+    Cookies.set("refresh", refresh, {
+      expires: 30,
+      path: '/',
+      // httpOnly: true,
+      secure: true,
+      sameSite: 'lax'
+    });
+    return { user, access, refresh };
   }
 );
 
@@ -29,6 +39,7 @@ export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_) => {
     localStorage.removeItem("access");
+    Cookies.remove("refresh")
     return;
   }
 );
@@ -42,10 +53,12 @@ export const authSlice = createSlice({
       .addCase(setUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.access = action.payload.access;
+        state.refresh = action.payload.refresh;
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.access = null;
+        state.refresh = null;
       });
   },
 });

@@ -27,7 +27,7 @@ const Register: React.FC = () => {
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
       const response = await registerUser(data).unwrap();
-      dispatch(setUser({ user: response.user, access: response.access }));
+      dispatch(setUser({ user: response.user, access: response.access, refresh: response.refresh }));
       dispatch(closeModal());
       reset();
     } catch (error) {
