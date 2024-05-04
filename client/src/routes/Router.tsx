@@ -36,7 +36,8 @@ const Router: React.FC = () => {
       <Route path="/cases" element={<Cases />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route 
-        path="/dashboard" 
+        // path="/dashboard" 
+        path="/dashboard/:id" 
         element={<PrivateRoute component={Dashboard}/>}
       />
 

@@ -12,7 +12,7 @@ const Register: React.FC = () => {
   const PASSWORD_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
   const dispatch: AppDispatch = useDispatch();
-  const [registerUser, { isLoading, isError, isSuccess }] = useRegisterUserMutation();
+  const [registerUser, { isLoading, isError }] = useRegisterUserMutation();
 
   const {
     register,

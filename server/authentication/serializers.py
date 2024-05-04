@@ -52,7 +52,5 @@ class RegisterSerializer(UserSerializer):
         try:
             user = User.objects.create_user(**validated_data)
         except IntegrityError:
-            raise serializers.ValidationError({'email': 'This email is already taken.'})
+            raise serializers.ValidationError({"email": "This email is already taken."})
         return user
-
-    
