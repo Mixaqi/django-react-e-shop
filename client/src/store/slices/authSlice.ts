@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { RootState, store } from "../store"
-import Cookies from "js-cookie"
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState, store } from '../store';
+import Cookies from 'js-cookie';
 
 export interface IUser {
   id: number;
@@ -18,34 +18,31 @@ const initialState: AuthState = {
   user: null,
   access: null,
   refresh: null,
-}
+};
 
 export const setUser = createAsyncThunk(
-  "auth/setUser",
+  'auth/setUser',
   async ({ user, access, refresh }: { user: IUser; access: string; refresh: string }) => {
-    localStorage.setItem("access", access);
-    Cookies.set("refresh", refresh, {
+    localStorage.setItem('access', access);
+    Cookies.set('refresh', refresh, {
       expires: 30,
       path: '/',
       // httpOnly: true,
       secure: true,
-      sameSite: 'lax'
+      sameSite: 'lax',
     });
     return { user, access, refresh };
-  }
-)
+  },
+);
 
-export const logoutUser = createAsyncThunk(
-  "auth/logoutUser",
-  async (_) => {
-    localStorage.removeItem("access");
-    Cookies.remove("refresh")
-    return;
-  }
-)
+export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
+  localStorage.removeItem('access');
+  Cookies.remove('refresh');
+  return;
+});
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -61,7 +58,7 @@ export const authSlice = createSlice({
         state.refresh = null;
       });
   },
-})
+});
 
-export const selectAuth = (state: RootState) => state.auth
-export default authSlice.reducer
+export const selectAuth = (state: RootState) => state.auth;
+export default authSlice.reducer;

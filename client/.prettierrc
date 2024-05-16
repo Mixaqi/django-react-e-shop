@@ -1,0 +1,27 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 120
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
+}

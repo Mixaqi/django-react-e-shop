@@ -6,14 +6,15 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BASE_URL,
-    prepareHeaders: (headers) => {
-      const access = localStorage.getItem("access")
-      if (access) {
-        headers.set("Authorization", `Bearer ${access}`);
-        // headers.set('Access-Control-Allow-Origin', '*') 
+    credentials: 'include',
+    prepareHeaders: (headers, api) => {
+      if (headers.get('authorization') === ''){
+          headers.delete('authorization');
+      } else {
+          headers.set('Authorization', `Bearer ${localStorage.getItem('access') ?? ''}`);
       }
-      return headers;
-    },
+      // headers.set('Access-Control-Allow-Origin', '*');
+  }
   }),
   endpoints: (builder) => ({
     loginUser: builder.mutation<{ access: string, refresh: string, user: IUser }, { email: string; password: string }>({
@@ -39,4 +40,5 @@ export const authApi = createApi({
     }),
   }),
 })
+
 export const { useLoginUserMutation, useRegisterUserMutation } = authApi

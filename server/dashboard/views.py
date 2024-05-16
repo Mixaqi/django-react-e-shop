@@ -1,10 +1,13 @@
 from __future__ import annotations
+import logging
 
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Dashboard
 from .serializers import DashboardSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardViewSet(viewsets.ModelViewSet):

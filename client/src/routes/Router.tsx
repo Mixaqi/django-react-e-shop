@@ -1,23 +1,22 @@
-import React from "react";
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Contacts from "../pages/Contacts";
-import Cases from "../pages/hardware/Cases";
-import Cooling from "../pages/hardware/Cooling";
-import CPU from "../pages/hardware/CPU";
-import GPU from "../pages/hardware/GPU";
-import HDD from "../pages/hardware/HDD";
-import Motherboard from "../pages/hardware/Motherboard";
-import PSU from "../pages/hardware/PSU";
-import RAM from "../pages/hardware/RAM";
-import SSD from "../pages/hardware/SSD";
-import Unauthorized from "../pages/auth/Unauthorized"
+import React from 'react';
+import Home from '../pages/Home';
+import About from '../pages/About';
+import Contacts from '../pages/Contacts';
+import Cases from '../pages/hardware/Cases';
+import Cooling from '../pages/hardware/Cooling';
+import CPU from '../pages/hardware/CPU';
+import GPU from '../pages/hardware/GPU';
+import HDD from '../pages/hardware/HDD';
+import Motherboard from '../pages/hardware/Motherboard';
+import PSU from '../pages/hardware/PSU';
+import RAM from '../pages/hardware/RAM';
+import SSD from '../pages/hardware/SSD';
+import Unauthorized from '../pages/auth/Unauthorized';
 
-import { Routes, Route } from "react-router-dom";
-import NotFound from "../pages/NotFound";
-import Dashboard from "../pages/Dashboard";
-import PrivateRoute from "./PrivateRoute";
-
+import { Routes, Route } from 'react-router-dom';
+import NotFound from '../pages/NotFound';
+import Dashboard from '../pages/Dashboard';
+import PrivateRoute from './PrivateRoute';
 
 const Router: React.FC = () => {
   return (
@@ -35,13 +34,13 @@ const Router: React.FC = () => {
       <Route path="/cooling" element={<Cooling />} />
       <Route path="/cases" element={<Cases />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route 
-        // path="/dashboard" 
-        path="/dashboard/:id" 
-        element={<PrivateRoute component={Dashboard}/>}
+      <Route
+        // path="/dashboard"
+        path="/dashboard/:id"
+        element={<PrivateRoute component={Dashboard} />}
       />
 
-      <Route path="*" element={<NotFound/>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

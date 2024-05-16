@@ -1,11 +1,11 @@
-import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { RegistrationFormData } from "./register.interface";
-import { useDispatch } from "react-redux";
-import { closeModal } from "../../store/slices/modalSlice";
-import { AppDispatch } from "../../store/store";
-import { useRegisterUserMutation } from "../../app/api/authApi";
-import { setUser } from "../../store/slices/authSlice";
+import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { RegistrationFormData } from './register.interface';
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../../store/slices/modalSlice';
+import { AppDispatch } from '../../store/store';
+import { useRegisterUserMutation } from '../../app/api/authApi';
+import { setUser } from '../../store/slices/authSlice';
 
 const Register: React.FC = () => {
   const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -21,13 +21,19 @@ const Register: React.FC = () => {
     watch,
     reset,
   } = useForm<RegistrationFormData>({
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
     try {
       const response = await registerUser(data).unwrap();
-      dispatch(setUser({ user: response.user, access: response.access, refresh: response.refresh }));
+      dispatch(
+        setUser({
+          user: response.user,
+          access: response.access,
+          refresh: response.refresh,
+        }),
+      );
       dispatch(closeModal());
       reset();
     } catch (error) {
@@ -36,7 +42,7 @@ const Register: React.FC = () => {
   };
 
   const passwordMatchValidator = (confirmedPassword: string) => {
-    return confirmedPassword === watch("password") || "Passwords should match!";
+    return confirmedPassword === watch('password') || 'Passwords should match!';
   };
 
   return (
@@ -44,56 +50,50 @@ const Register: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
         <div className="mb-3">
           <input
-            {...register("username", {
-              required: "Username is required field!",
+            {...register('username', {
+              required: 'Username is required field!',
             })}
             className="form-control"
             placeholder="Username"
           />
-          {errors?.username && (
-            <div className="text-danger">{errors.username.message}</div>
-          )}
+          {errors?.username && <div className="text-danger">{errors.username.message}</div>}
         </div>
 
         <div className="mb-3">
           <input
-            {...register("email", {
-              required: "Email is required field!",
+            {...register('email', {
+              required: 'Email is required field!',
               pattern: {
                 value: EMAIL_REGEX,
-                message: "Please enter a valid email",
+                message: 'Please enter a valid email',
               },
             })}
             className="form-control"
             placeholder="Email"
           />
-          {errors?.email && (
-            <div className="text-danger">{errors.email.message}</div>
-          )}
+          {errors?.email && <div className="text-danger">{errors.email.message}</div>}
         </div>
 
         <div className="row g-2 mb-2">
           <div className="col">
             <input
-              {...register("password", {
-                required: "Password is required field!",
+              {...register('password', {
+                required: 'Password is required field!',
                 pattern: {
                   value: PASSWORD_REGEX,
-                  message: "Please enter a valid password",
+                  message: 'Please enter a valid password',
                 },
               })}
               className="form-control"
               type="password"
               placeholder="Password"
             />
-            {errors?.password && (
-              <div className="text-danger">{errors.password.message}</div>
-            )}
+            {errors?.password && <div className="text-danger">{errors.password.message}</div>}
           </div>
           <div className="col">
             <input
-              {...register("confirmedPassword", {
-                required: "Confirmed password is required field!",
+              {...register('confirmedPassword', {
+                required: 'Confirmed password is required field!',
                 validate: passwordMatchValidator,
               })}
               className="form-control"
@@ -101,9 +101,7 @@ const Register: React.FC = () => {
               placeholder="Confirmed Password"
             />
             {errors?.confirmedPassword && (
-              <div className="text-danger">
-                {errors.confirmedPassword.message}
-              </div>
+              <div className="text-danger">{errors.confirmedPassword.message}</div>
             )}
           </div>
         </div>
@@ -115,7 +113,7 @@ const Register: React.FC = () => {
 
         <div>
           <button type="submit" className="btn btn-primary" disabled={isLoading}>
-            {isLoading ? "Registration ..." : "Register"}
+            {isLoading ? 'Registration ...' : 'Register'}
           </button>
         </div>
       </form>

@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import modalReducer from "./slices/modalSlice";
-import { authApi } from "../app/api/authApi";
-import { dashboardApi } from "../app/api/dashboardApi";
-import { setupListeners } from "@reduxjs/toolkit/query/react";
-import authReducer from "../store/slices/authSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import modalReducer from './slices/modalSlice';
+import { authApi } from '../app/api/authApi';
+import { dashboardApi } from '../app/api/dashboardApi';
+import { setupListeners } from '@reduxjs/toolkit/query/react';
+import authReducer from '../store/slices/authSlice';
 
 export const store = configureStore({
   reducer: {

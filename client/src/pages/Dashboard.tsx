@@ -2,10 +2,10 @@ import React from 'react';
 import { useGetUserDashboardInfoQuery } from '../app/api/dashboardApi';
 
 export interface DashboardInfo {
-  id: number,
-  full_name: string,
-  verified: boolean,
-  image?: string | undefined,
+  id: number;
+  full_name: string;
+  verified: boolean;
+  image?: string | undefined;
 }
 
 const Dashboard: React.FC = () => {

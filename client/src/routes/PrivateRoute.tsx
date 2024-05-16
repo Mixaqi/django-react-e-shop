@@ -7,7 +7,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isAuthenticated }) => {
-  isAuthenticated = localStorage.getItem("access")
+  isAuthenticated = localStorage.getItem('access');
   if (isAuthenticated) {
     return <Component />;
   } else {

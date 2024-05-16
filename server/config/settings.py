@@ -4,7 +4,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,10 +20,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = []
-
-
-# Application definition
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -44,15 +42,15 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    # "config.middleware.CorsMiddleware", #delete
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -163,21 +161,8 @@ SIMPLE_JWT = {
     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
     "JTI_CLAIM": "jti",
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=10),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
 AUTH_USER_MODEL = "authentication.User"
-
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-)
-
-CORS_ALLOW_HEADERS = default_headers + (
-    'Access-Control-Allow-Headers',
-    'Access-Control-Allow-Credentials',
-    'Access-Control-Allow-Origin',
-)
