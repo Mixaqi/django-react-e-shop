@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState, store } from '../store';
+import { RootState } from '../store';
 import Cookies from 'js-cookie';
 
 export interface IUser {
@@ -24,6 +24,7 @@ export const setUser = createAsyncThunk(
   'auth/setUser',
   async ({ user, access, refresh }: { user: IUser; access: string; refresh: string }) => {
     localStorage.setItem('access', access);
+    localStorage.setItem('user_id', user.id.toString())
     Cookies.set('refresh', refresh, {
       expires: 30,
       path: '/',

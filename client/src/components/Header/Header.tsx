@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../store/slices/modalSlice';
 import { logoutUser, selectAuth } from '../../store/slices/authSlice';
@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector(selectAuth);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access'));
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoggedIn(!!localStorage.getItem('access'));
@@ -18,6 +19,13 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     dispatch(logoutUser());
     setIsLoggedIn(false);
+  };
+
+  const handleDashboardClick = () => {
+    const userId = localStorage.getItem('user_id');
+    if (userId) {
+      navigate(`/dashboard/${userId}`);
+    }
   };
 
   return (
@@ -39,11 +47,16 @@ const Header: React.FC = () => {
               Contacts
             </Nav.Link>
           </Nav>
-          <Nav className="authButtons">
+          <Nav className="ms-auto authButtons">
             {isLoggedIn ? (
-              <Button variant="outline-light" onClick={handleLogout}>
-                Logout
-              </Button>
+              <>
+                <Button variant="outline-light" onClick={handleDashboardClick}>
+                  Dashboard
+                </Button>
+                <Button variant="outline-light" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Button variant="outline-light" onClick={() => dispatch(openModal('register'))}>

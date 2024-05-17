@@ -13,7 +13,6 @@ export const authApi = createApi({
       } else {
           headers.set('Authorization', `Bearer ${localStorage.getItem('access') ?? ''}`);
       }
-      // headers.set('Access-Control-Allow-Origin', '*');
   }
   }),
   endpoints: (builder) => ({

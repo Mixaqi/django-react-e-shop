@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGetUserDashboardInfoQuery } from '../app/api/dashboardApi';
+import { useParams } from 'react-router-dom';
 
 export interface DashboardInfo {
   id: number;
@@ -9,10 +10,15 @@ export interface DashboardInfo {
 }
 
 const Dashboard: React.FC = () => {
-  const { data, error, isLoading } = useGetUserDashboardInfoQuery(1);
+  const { id } = useParams<{ id: string }>();
+  const { data, error, isLoading } = useGetUserDashboardInfoQuery(Number(id));
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.toString()}</div>;
   }
 
   if (!data) {
