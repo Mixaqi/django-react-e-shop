@@ -6,9 +6,7 @@ export const dashboardApi = authApi.injectEndpoints({
     getUserDashboardInfo: builder.query<DashboardInfo, number>({
       query: (id: number) => ({
         url: `/api/dashboard/${id}`,
-        // headers: {
-        //   authorization: '',
-        // },
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access') ?? ''}`,
         },
