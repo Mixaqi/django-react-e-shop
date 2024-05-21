@@ -203,3 +203,5 @@ build/
 # Файлы сборки TypeScript
 *.js
 *.js.map
+
+volume/

@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.2.61",
     "@types/react-redux": "^7.1.33"
   }

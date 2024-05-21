@@ -24,9 +24,7 @@ const refreshToken = async () => {
 const getCookie = (name: string) => {
   const match = document.cookie.split(';').map(el => { let [key,value] = el.split('='); return { [key.trim()]: value }})
   const filteredMatch = match.filter(e => Object.keys(e)[0] === name)
-
   let matchLength = filteredMatch.length
-
   return filteredMatch[matchLength - 1][name]
 }
 
@@ -50,6 +48,7 @@ const baseQueryWithReauth: BaseQueryFn<
   if (result.error && result.error.status === 401) {
     try {
       const newToken = await refreshToken();
+      localStorage.setItem('access', newToken) // check correct or not
       result = await fetchBaseQuery({
         baseUrl: process.env.REACT_APP_BASE_URL,
         credentials: 'include',
