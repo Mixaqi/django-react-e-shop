@@ -1,32 +1,31 @@
 import { createApi, fetchBaseQuery, FetchBaseQueryError, BaseQueryFn } from "@reduxjs/toolkit/query/react";
 import { IUser, logoutUser } from "../../store/slices/authSlice";
+import Cookies from "js-cookie";
 
 const refreshToken = async () => {
+  const refresh = Cookies.get('refresh');
+  if (!refresh) {
+    throw new Error('No refresh token available');
+  }
+
   const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/token/refresh/`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ refresh: getCookie('refresh') }),
+    body: JSON.stringify({ refresh }),
   });
+
   const data = await response.json();
+
   if (response.ok) {
     localStorage.setItem('access', data.access);
     return data.access;
   } else {
-    throw new Error('Unable to refresh token');
+    throw new Error(data.detail || 'Unable to refresh token');
   }
 };
-
-
-
-const getCookie = (name: string) => {
-  const match = document.cookie.split(';').map(el => { let [key,value] = el.split('='); return { [key.trim()]: value }})
-  const filteredMatch = match.filter(e => Object.keys(e)[0] === name)
-  let matchLength = filteredMatch.length
-  return filteredMatch[matchLength - 1][name]
-}
 
 const baseQueryWithReauth: BaseQueryFn<
   { url: string; method: string; body?: any; params?: any },
@@ -46,9 +45,10 @@ const baseQueryWithReauth: BaseQueryFn<
   })(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
+    console.log('Access token expired. Attempting to refresh token...');
     try {
       const newToken = await refreshToken();
-      localStorage.setItem('access', newToken) // check correct or not
+      console.log('New access token:', newToken);
       result = await fetchBaseQuery({
         baseUrl: process.env.REACT_APP_BASE_URL,
         credentials: 'include',
@@ -57,8 +57,9 @@ const baseQueryWithReauth: BaseQueryFn<
           return headers;
         },
       })(args, api, extraOptions);
-    } catch (error) {
-      api.dispatch(logoutUser());
+    } catch (error: any) {
+      console.error('Token refresh error:', error.message);
+      // api.dispatch(logoutUser());
     }
   }
 
