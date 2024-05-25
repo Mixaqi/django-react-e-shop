@@ -3,7 +3,7 @@ version: "3"
 services:
   postgres:
     image: "postgres:latest"
-    restart: "always"
+    # restart: "always"
     environment:
       - POSTGRES_DB=${PG_NAME}
       - POSTGRES_USER=${PG_USER}
@@ -28,7 +28,7 @@ services:
       - DB_PORT=${PG_PORT}
     depends_on:
       - postgres
-    restart: "always"
+    # restart: "always"
     command: ["bash",
               "-c",
               "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
@@ -58,6 +58,8 @@ services:
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+    # volumes:
+    #   - ./localstack-data:/var/lib/localstack
 
 volumes:
   postgres-data:

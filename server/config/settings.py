@@ -4,6 +4,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import boto3
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,11 +41,12 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "djangorestframework_camel_case",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    # "config.middleware.CorsMiddleware", #delete
+    "djangorestframework_camel_case.middleware.CamelCaseMiddleWare",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -136,7 +138,14 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    'DEFAULT_RENDERER_CLASSES': (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+    ),
+
+    'DEFAULT_PARSER_CLASSES': (
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ),
 }
 
 
@@ -167,3 +176,14 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "authentication.User"
+
+session = boto3.Session(
+    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID", "test"),
+    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY", "test"),
+    region_name=os.environ.get("AWS_REGION", "us-east-1"),
+)
+
+s3_client = session.client(
+    service_name="s3",
+    endpoint_url=os.environ.get("S3_ENDPOINT_URL", "http://localhost:4566")
+)

@@ -6,6 +6,7 @@ export interface IUser {
   id: number;
   username: string;
   email: string;
+  avatarUrl?: string | null;
 }
 
 export interface AuthState {
@@ -20,13 +21,14 @@ const initialState: AuthState = {
   refresh: null,
 };
 
+
 export const setUser = createAsyncThunk(
   'auth/setUser',
   async ({ user, access, refresh }: { user: IUser; access: string; refresh: string }) => {
     localStorage.setItem('access', access);
     localStorage.setItem('user_id', user.id.toString())
     Cookies.set('refresh', refresh, {
-      expires: 30,
+      expires: 59,
       path: '/',
       // httpOnly: true,
       secure: true,
@@ -37,6 +39,7 @@ export const setUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
+  localStorage.removeItem('user_id')
   localStorage.removeItem('access');
   Cookies.remove('refresh');
   return;

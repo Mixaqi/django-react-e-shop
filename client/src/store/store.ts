@@ -13,7 +13,7 @@ export const store = configureStore({
     dashboardApi: dashboardApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({}).concat([authApi.middleware, dashboardApi.middleware]),
+    getDefaultMiddleware({}).concat([authApi.middleware, dashboardApi.middleware ]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

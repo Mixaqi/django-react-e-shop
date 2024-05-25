@@ -13,4 +13,5 @@ routes.register(r"auth/refresh", RefreshViewSet, basename="auth-refresh")
 routes.register(r"users", UserViewSet, basename="users")
 
 
+
 urlpatterns = [*routes.urls]

@@ -45,10 +45,8 @@ const baseQueryWithReauth: BaseQueryFn<
   })(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    console.log('Access token expired. Attempting to refresh token...');
     try {
       const newToken = await refreshToken();
-      console.log('New access token:', newToken);
       result = await fetchBaseQuery({
         baseUrl: process.env.REACT_APP_BASE_URL,
         credentials: 'include',
@@ -78,6 +76,7 @@ export const authApi = createApi({
           email,
           password,
         },
+
       }),
     }),
     registerUser: builder.mutation<{ access: string, refresh: string, user: IUser }, { username: string, email: string; password: string }>({
@@ -92,6 +91,7 @@ export const authApi = createApi({
       }),
     }),
   }),
+    
 });
 
 export const { useLoginUserMutation, useRegisterUserMutation } = authApi;

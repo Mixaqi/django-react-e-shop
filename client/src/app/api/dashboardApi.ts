@@ -7,12 +7,18 @@ export const dashboardApi = authApi.injectEndpoints({
       query: (id: number) => ({
         url: `/api/dashboard/${id}`,
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access') ?? ''}`,
-        },
+        // headers: {
+        //   'Authorization': `Bearer ${localStorage.getItem('access') ?? ''}`,
+        // },
       }),
     }),
+    getUser: builder.query<DashboardInfo, number>({
+      query: (id: number) => ({
+        url: `/users/${id}`,
+        method: 'GET',
+      })
+    })
   }),
 });
 
-export const { useGetUserDashboardInfoQuery } = dashboardApi;
+export const { useGetUserDashboardInfoQuery, useGetUserQuery } = dashboardApi;
