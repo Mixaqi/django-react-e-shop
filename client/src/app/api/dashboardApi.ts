@@ -1,4 +1,5 @@
 import { DashboardInfo } from '../../pages/Dashboard';
+import { IUser } from '../../store/slices/authSlice';
 import { authApi } from './authApi';
 
 export const dashboardApi = authApi.injectEndpoints({
@@ -7,12 +8,9 @@ export const dashboardApi = authApi.injectEndpoints({
       query: (id: number) => ({
         url: `/api/dashboard/${id}`,
         method: 'GET',
-        // headers: {
-        //   'Authorization': `Bearer ${localStorage.getItem('access') ?? ''}`,
-        // },
       }),
     }),
-    getUser: builder.query<DashboardInfo, number>({
+    getUser: builder.query<IUser, number>({
       query: (id: number) => ({
         url: `/users/${id}`,
         method: 'GET',
