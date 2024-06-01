@@ -177,13 +177,13 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = "authentication.User"
 
-session = boto3.Session(
+SESSION = boto3.Session(
     aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID", "test"),
     aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY", "test"),
     region_name=os.environ.get("AWS_REGION", "us-east-1"),
 )
 
-s3_client = session.client(
+S3_CLIENT = SESSION.client(
     service_name="s3",
     endpoint_url=os.environ.get("S3_ENDPOINT_URL", "http://localhost:4566")
 )

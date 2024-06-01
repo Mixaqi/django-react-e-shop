@@ -11,8 +11,10 @@ from authentication.models import User
 class Dashboard(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)
-    image_url = models.CharField(max_length=500, blank=True, null=True)
+    image = models.URLField(max_length=200, blank=True, null=True)
     verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @receiver(post_save, sender=User)
     def create_profile(sender: Any, instance: User, created: bool, **kwargs: Any) -> None:

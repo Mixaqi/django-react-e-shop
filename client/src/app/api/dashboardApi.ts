@@ -15,8 +15,29 @@ export const dashboardApi = authApi.injectEndpoints({
         url: `/users/${id}`,
         method: 'GET',
       })
+    }),
+    changeUserDashboardInfo: builder.mutation<DashboardInfo, { id: number, fullName: string }>({
+      query: ({ id, fullName }) => ({
+        url: `/api/dashboard/${id}/`,
+        method: 'PATCH',
+        body: {
+          fullName,
+        }
+      })
+    }),
+    uploadUserImage: builder.mutation<{ image: string }, FormData>({
+      query: (formData) => ({
+        url: `/api/dashboard/upload-image/`,
+        method: 'POST',
+        body: formData,
+      })
     })
   }),
 });
 
-export const { useGetUserDashboardInfoQuery, useGetUserQuery } = dashboardApi;
+export const { 
+  useGetUserDashboardInfoQuery, 
+  useGetUserQuery, 
+  useChangeUserDashboardInfoMutation,
+  useUploadUserImageMutation 
+} = dashboardApi;
