@@ -26,12 +26,14 @@ export const dashboardApi = authApi.injectEndpoints({
       })
     }),
     uploadUserImage: builder.mutation<{ image: string }, FormData>({
-      query: (formData) => ({
-        url: `/api/dashboard/upload-image/`,
-        method: 'POST',
-        body: formData,
-      })
-    })
+      query: (formData) => {
+        return {
+          url: `/api/dashboard/upload-image/${localStorage.getItem('user_id')}/`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 

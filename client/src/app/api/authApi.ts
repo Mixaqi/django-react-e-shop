@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery, FetchBaseQueryError, BaseQueryFn } from "@reduxjs/toolkit/query/react";
-import { IUser, logoutUser } from "../../store/slices/authSlice";
+import { IUser } from "../../store/slices/authSlice";
 import Cookies from "js-cookie";
 
 const refreshToken = async () => {

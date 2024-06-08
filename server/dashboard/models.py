@@ -11,7 +11,7 @@ from authentication.models import User
 class Dashboard(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)
-    image = models.URLField(max_length=200, blank=True, null=True)
+    image = models.ImageField(null=True, blank=True, upload_to="user-avatars/")
     verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

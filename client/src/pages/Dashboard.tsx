@@ -42,9 +42,9 @@ const Dashboard: React.FC = () => {
   };
 
   const handleImageUpload = async () => {
-    if (image && id) {
+    if (image) {
       const formData = new FormData();
-      formData.append('id', id);
+      // formData.append('id', id);
       formData.append('image', image);
 
       try {
