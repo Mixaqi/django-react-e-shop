@@ -6,7 +6,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from rest_framework.decorators import action
 from config.settings import logger
 
@@ -19,7 +19,7 @@ class DashboardViewSet(viewsets.ModelViewSet):
     queryset = Dashboard.objects.all()
     serializer_class = DashboardSerializer
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, JSONParser]
+    parser_classes = [MultiPartParser, JSONParser, FormParser]
     lookup_field = "id"
 
     def retrieve(self, request: Request, id: Optional[int] = None) -> Response:
@@ -65,7 +65,6 @@ class DashboardViewSet(viewsets.ModelViewSet):
             if instance.image:
                 instance.image.delete()
             instance.image = file
-            logger.info("FUNCTION IS WORKING")
             instance.save()
             serializer = DashboardSerializer(instance)
             return Response(serializer.data, status=status.HTTP_200_OK)

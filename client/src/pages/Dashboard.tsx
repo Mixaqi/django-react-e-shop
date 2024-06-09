@@ -19,13 +19,20 @@ const Dashboard: React.FC = () => {
   const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
   const [uploadUserImage] = useUploadUserImageMutation();
 
+  const MAX_FILE_SIZE = parseInt(process.env.REACT_APP_AVATAR_MAX_FILE_SIZE || '2097152');
+
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        toast.error('File size exceeds the maximum limit');
+        return;
+      }
+      setImage(selectedFile);
     }
   };
 
@@ -109,6 +116,14 @@ const Dashboard: React.FC = () => {
             <button className="btn btn-primary" onClick={handleImageUpload} disabled={!image}>
               Upload Image
             </button>
+          </div>
+          <div className="mt-4">
+            <img
+              src={`${process.env.REACT_APP_BASE_URL}${data.image || 'default_image_url'}`}
+              alt="User Avatar"
+              className="rounded-circle"
+              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+            />
           </div>
         </div>
       </div>
