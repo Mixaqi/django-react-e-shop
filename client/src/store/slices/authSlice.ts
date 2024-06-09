@@ -35,7 +35,6 @@ export const initializeAuth = createAsyncThunk(
 
     if (access && userId && refresh) {
       const result = await dispatch(dashboardApi.endpoints.getUser.initiate(Number(userId)));
-      console.log(result)
       if ('data' in result) {
         const user = result.data as IUser;
         return { user, access, refresh };

@@ -44,7 +44,6 @@ const Dashboard: React.FC = () => {
   const handleImageUpload = async () => {
     if (image) {
       const formData = new FormData();
-      // formData.append('id', id);
       formData.append('image', image);
 
       try {
@@ -103,10 +102,11 @@ const Dashboard: React.FC = () => {
               </button>
             </div>
           </div>
+          
           <p className="card-text">Verified: {data.verified ? 'Yes' : 'No'}</p>
           <div className="mt-4">
             <input type="file" accept="image/*" onChange={handleImageChange} />
-            <button className="btn btn-primary mt-2" onClick={handleImageUpload} disabled={!image}>
+            <button className="btn btn-primary" onClick={handleImageUpload} disabled={!image}>
               Upload Image
             </button>
           </div>
