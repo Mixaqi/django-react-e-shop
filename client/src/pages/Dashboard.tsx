@@ -3,6 +3,7 @@ import { useGetUserDashboardInfoQuery, useChangeUserDashboardInfoMutation, useUp
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export interface DashboardInfo {
   user: number;
@@ -91,39 +92,51 @@ const Dashboard: React.FC = () => {
     <div className="container">
       <ToastContainer />
       <div className="card my-5">
+        <div className="card-header">
+          <h3>User Dashboard</h3>
+        </div>
         <div className="card-body">
-          <p className="card-text">User ID: {data.user}</p>
-          <div className="d-flex justify-content-between align-items-center">
-            <p className="card-text mb-0">Full Name: {data.fullName}</p>
-            <div className="d-flex align-items-center" style={{ maxWidth: '50%' }}>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter new full name"
-                value={fullName}
-                onChange={handleFullNameChange}
-                style={{ marginRight: '10px' }}
+          <div className="row">
+            <div className="col-md-4 text-center">
+              <img
+                src={`${process.env.REACT_APP_BASE_URL}${data.image || 'default_image_url'}`}
+                alt="User Avatar"
+                className="rounded-circle"
+                style={{ width: '150px', height: '150px', objectFit: 'cover' }}
               />
-              <button className="btn btn-primary" onClick={handleFullNameUpdate} disabled={!fullName}>
-                Update
-              </button>
+              <div className="mt-4">
+                <input type="file" accept="image/*" onChange={handleImageChange} className="form-control" />
+                <button className="btn btn-primary mt-2" onClick={handleImageUpload} disabled={!image}>
+                  Upload Image
+                </button>
+              </div>
             </div>
-          </div>
-          
-          <p className="card-text">Verified: {data.verified ? 'Yes' : 'No'}</p>
-          <div className="mt-4">
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            <button className="btn btn-primary" onClick={handleImageUpload} disabled={!image}>
-              Upload Image
-            </button>
-          </div>
-          <div className="mt-4">
-            <img
-              src={`${process.env.REACT_APP_BASE_URL}${data.image || 'default_image_url'}`}
-              alt="User Avatar"
-              className="rounded-circle"
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-            />
+            <div className="col-md-8">
+              <div className="mb-3">
+                <label htmlFor="userId" className="form-label">User ID</label>
+                <input type="text" id="userId" className="form-control" value={data.user} readOnly />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="fullName" className="form-label">Full Name</label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    id="fullName"
+                    className="form-control"
+                    placeholder="Enter new full name"
+                    value={fullName}
+                    onChange={handleFullNameChange}
+                  />
+                  <button className="btn btn-primary" onClick={handleFullNameUpdate} disabled={!fullName}>
+                    Update
+                  </button>
+                </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="verified" className="form-label">Verified</label>
+                <input type="text" id="verified" className="form-control" value={data.verified ? 'Yes' : 'No'} readOnly />
+              </div>
+            </div>
           </div>
         </div>
       </div>
