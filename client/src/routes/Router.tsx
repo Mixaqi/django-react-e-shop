@@ -19,30 +19,30 @@ import Dashboard from '../pages/Dashboard';
 import PrivateRoute from './PrivateRoute';
 
 const Router: React.FC = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contacts" element={<Contacts />} />
-      <Route path="/ssd" element={<SSD />} />
-      <Route path="/hdd" element={<HDD />} />
-      <Route path="/gpu" element={<GPU />} />
-      <Route path="/cpu" element={<CPU />} />
-      <Route path="/psu" element={<PSU />} />
-      <Route path="/ram" element={<RAM />} />
-      <Route path="/motherboard" element={<Motherboard />} />
-      <Route path="/cooling" element={<Cooling />} />
-      <Route path="/cases" element={<Cases />} />
-      <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route
-        // path="/dashboard"
-        path="/dashboard/:id"
-        element={<PrivateRoute component={Dashboard} />}
-      />
+    return (
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/ssd" element={<SSD />} />
+            <Route path="/hdd" element={<HDD />} />
+            <Route path="/gpu" element={<GPU />} />
+            <Route path="/cpu" element={<CPU />} />
+            <Route path="/psu" element={<PSU />} />
+            <Route path="/ram" element={<RAM />} />
+            <Route path="/motherboard" element={<Motherboard />} />
+            <Route path="/cooling" element={<Cooling />} />
+            <Route path="/cases" element={<Cases />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route
+                // path="/dashboard"
+                path="/dashboard/:id"
+                element={<PrivateRoute component={Dashboard} />}
+            />
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
+            <Route path="*" element={<NotFound />} />
+        </Routes>
+    );
 };
 
 export default Router;

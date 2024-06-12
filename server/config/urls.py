@@ -13,12 +13,12 @@ from .routers import routes
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(
-        "api/", include(("config.routers", "config"), namespace="config-api")
-    ),
+    path("api/", include(("config.routers", "config"), namespace="config-api")),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/dashboard/", include("dashboard.urls")),  
+    path("api/dashboard/", include("dashboard.urls")),
+    path("api/auth/", include("djoser.urls")),
+    path("api/auth/", include("djoser.urls.jwt")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += routes.urls

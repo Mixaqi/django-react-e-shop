@@ -55,4 +55,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return f"{self.email}"
-

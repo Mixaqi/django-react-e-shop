@@ -5,8 +5,8 @@ from rest_framework import serializers
 
 
 class DashboardSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.id')
+    user = serializers.ReadOnlyField(source="user.id")
 
     class Meta:
         model = Dashboard
-        fields = ['user', 'full_name', 'verified', 'image']
+        fields = ["user", "full_name", "is_verified", "image"]

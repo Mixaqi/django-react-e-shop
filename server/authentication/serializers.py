@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from authentication.models import User
+
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import update_last_login
@@ -9,9 +10,19 @@ from django.db import IntegrityError
 
 
 class UserSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(source="dashboard.image", read_only=True)
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "is_active", "created_at", "updated_at"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "is_active",
+            "created_at",
+            "updated_at",
+            "image",
+        ]
         read_only_fields = ["is_active", "created_at", "updated_at"]
 
 

@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from authentication.serializers import LoginSerializer, RegisterSerializer
 from authentication.models import User
 from authentication.serializers import UserSerializer
+
 # from server.authentication import serializers
 
 
@@ -32,13 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(id=self.request.user.id)
         return queryset
 
-    # def get_object(self) -> User:
-    #     lookup_field_value = self.kwargs[self.lookup_field]
-    #     obj = User.objects.get(lookup_field_value)
-    #     self.check_object_permissions(self.request, obj)
-    #     return obj
-
-    def retrieve(self, request: Request, pk: Optional[int]=None) -> Response:
+    def retrieve(self, request: Request, pk: Optional[int] = None) -> Response:
         try:
             user = User.objects.get(pk=pk)
             serializer = UserSerializer(user)

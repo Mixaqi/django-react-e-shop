@@ -10,24 +10,23 @@ import { useAppDispatch } from './store/hooks';
 import { useEffect } from 'react';
 import { initializeAuth } from './store/slices/authSlice';
 
-
 const App: React.FC = () => {
-  const { isOpen } = useAppSelector((state: RootState) => state.modal);
-  const dispatch = useAppDispatch()
+    const { isOpen } = useAppSelector((state: RootState) => state.modal);
+    const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(initializeAuth())
-  }, [dispatch])
+    useEffect(() => {
+        dispatch(initializeAuth());
+    }, [dispatch]);
 
-  return (
-    <BrowserRouter>
-      {isOpen && <AuthModal />}
-      <Header />
-      <Categories />
-      <Router />
-      <Footer />
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            {isOpen && <AuthModal />}
+            <Header />
+            <Categories />
+            <Router />
+            <Footer />
+        </BrowserRouter>
+    );
 };
 
 export default App;
