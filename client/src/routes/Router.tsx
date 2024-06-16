@@ -1,21 +1,21 @@
 import React from 'react';
-import Home from '../pages/Home';
 import About from '../pages/About';
 import Contacts from '../pages/Contacts';
+import Home from '../pages/Home';
+import Unauthorized from '../pages/auth/Unauthorized';
+import CPU from '../pages/hardware/CPU';
 import Cases from '../pages/hardware/Cases';
 import Cooling from '../pages/hardware/Cooling';
-import CPU from '../pages/hardware/CPU';
 import GPU from '../pages/hardware/GPU';
 import HDD from '../pages/hardware/HDD';
 import Motherboard from '../pages/hardware/Motherboard';
 import PSU from '../pages/hardware/PSU';
 import RAM from '../pages/hardware/RAM';
 import SSD from '../pages/hardware/SSD';
-import Unauthorized from '../pages/auth/Unauthorized';
 
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
-import Dashboard from '../pages/Dashboard';
+import Dashboard from '../pages/dashoard/Dashboard';
 import PrivateRoute from './PrivateRoute';
 
 const Router: React.FC = () => {

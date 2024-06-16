@@ -3,11 +3,15 @@ import {
     useGetUserDashboardInfoQuery,
     useChangeUserDashboardInfoMutation,
     useUploadUserImageMutation,
-} from '../app/api/dashboardApi';
+    useDeleteUserImageMutation,
+} from 'app/api/dashboardApi';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Avatar from 'components/Avatar/Avatar';
+import AnonymousAvatar from 'assets/cat_anon.webp';
+import './Dashboard.css'
 
 export interface DashboardInfo {
     user: number;
@@ -22,9 +26,10 @@ const Dashboard: React.FC = () => {
         Number(id),
     );
     const [fullName, setFullName] = useState('');
-    const [image, setImage] = useState<File | null>(null);
+    const [imageAvatar, setImage] = useState<File | null>(null);
     const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
     const [uploadUserImage] = useUploadUserImageMutation();
+    const [deleteUserImage] = useDeleteUserImageMutation();
 
     const MAX_FILE_SIZE = parseInt(
         process.env.REACT_APP_AVATAR_MAX_FILE_SIZE || '2097152',
@@ -61,9 +66,9 @@ const Dashboard: React.FC = () => {
     };
 
     const handleImageUpload = async () => {
-        if (image) {
+        if (imageAvatar) {
             const formData = new FormData();
-            formData.append('image', image);
+            formData.append('image', imageAvatar);
 
             try {
                 await uploadUserImage(formData).unwrap();
@@ -74,6 +79,20 @@ const Dashboard: React.FC = () => {
             }
         } else {
             toast.error('No image selected or ID is missing');
+        }
+    };
+
+    const handleDeleteImage = async () => {
+        if (data && data.image) {
+            try {
+                await deleteUserImage({ id: Number(id) }).unwrap();
+                toast.success('Image deleted successfully');
+                refetch();
+            } catch (err) {
+                toast.error('Failed to delete image');
+            }
+        } else {
+            toast.error('No image to delete');
         }
     };
 
@@ -99,6 +118,10 @@ const Dashboard: React.FC = () => {
         return <div className="container">No data available</div>;
     }
 
+    const userImage = data.image
+        ? `${process.env.REACT_APP_BASE_URL}${data.image}`
+        : AnonymousAvatar;
+
     return (
         <div className="container">
             <ToastContainer />
@@ -109,16 +132,7 @@ const Dashboard: React.FC = () => {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-4 text-center">
-                            <img
-                                src={`${process.env.REACT_APP_BASE_URL}${data.image || 'default_image_url'}`}
-                                alt="User Avatar"
-                                className="rounded-circle"
-                                style={{
-                                    width: '150px',
-                                    height: '150px',
-                                    objectFit: 'cover',
-                                }}
-                            />
+                            <Avatar image={userImage} size={150} />
                             <div className="mt-4">
                                 <input
                                     type="file"
@@ -126,13 +140,22 @@ const Dashboard: React.FC = () => {
                                     onChange={handleImageChange}
                                     className="form-control"
                                 />
-                                <button
-                                    className="btn btn-primary mt-2"
-                                    onClick={handleImageUpload}
-                                    disabled={!image}
-                                >
-                                    Upload Image
-                                </button>
+                                <div className="image-interaction-buttons">
+                                    <button
+                                        className="btn btn-primary mt-2"
+                                        onClick={handleImageUpload}
+                                        disabled={!imageAvatar}
+                                    >
+                                        Upload Image
+                                    </button>
+                                    <button
+                                        className="btn btn-danger mt-2"
+                                        onClick={handleDeleteImage}
+                                        disabled={!data.image}
+                                    >
+                                        Delete Image
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-8">

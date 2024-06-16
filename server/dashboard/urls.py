@@ -14,4 +14,9 @@ urlpatterns = [
         DashboardViewSet.as_view({"post": "upload_image"}),
         name="dashboard-upload-image",
     ),
+    path(
+        "delete-image/<int:id>/",
+        DashboardViewSet.as_view({"post": "delete_image"}),
+        name="dashboard-delete-image",
+    )
 ]

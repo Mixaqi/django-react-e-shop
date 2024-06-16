@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../store/slices/modalSlice';
 import { logoutUser, selectAuth } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store/store';
+import "./Header.css";
 
 const Header: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -51,7 +52,7 @@ const Header: React.FC = () => {
                     </Nav>
                     <Nav className="ms-auto authButtons">
                         {isLoggedIn ? (
-                            <>
+                            <div className="header-auth-buttons">
                                 <Button
                                     variant="outline-light"
                                     onClick={handleDashboardClick}
@@ -64,7 +65,7 @@ const Header: React.FC = () => {
                                 >
                                     Logout
                                 </Button>
-                            </>
+                            </div>
                         ) : (
                             <>
                                 <Button

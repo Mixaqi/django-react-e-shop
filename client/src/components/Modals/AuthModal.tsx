@@ -6,8 +6,9 @@ import Register from '../../pages/auth/Register';
 import { useAppSelector } from '../../store/hooks';
 import { closeModal, setModalMode } from '../../store/slices/modalSlice';
 import { AppDispatch } from '../../store/store';
+import './AuthModal.css';
 
-const AuthModal = () => {
+const AuthModal: React.FC = () => {
     const { isOpen, mode } = useAppSelector((store) => store.modal);
     const dispatch: AppDispatch = useDispatch();
 
@@ -26,7 +27,7 @@ const AuthModal = () => {
                     <Modal.Title>Auth Modal</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div>
+                    <div className="modal-auth-buttons">
                         <button
                             className={`btn btn-outline-${mode === 'register' ? 'success' : 'primary'}`}
                             onClick={() => togglePage('register')}

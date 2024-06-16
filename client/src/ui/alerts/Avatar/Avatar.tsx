@@ -1,50 +1,37 @@
 import React from 'react';
-import classNames from 'classnames';
 
-export interface IAvatarProps {
-    className: string;
-    size?: number;
-    title?: string;
-    image?: string;
+interface AvatarProps {
+    image: string;
+    size: number;
 }
 
-export const Avatar: React.FC<IAvatarProps> = ({
-    className,
-    size = 46,
-    image,
-    title,
-}) => {
-    const sizeInner = `${size - 8}px`;
-    const sizeWrapper = `${size}px`;
-    const sizeTitle = `${size / 2}px`;
+const Avatar: React.FC<AvatarProps> = ({ image, size }) => {
+    const imageSize = `${size}px`;
+
     return (
         <div
-            className={classNames('Avatar', className)}
-            style={{ width: sizeInner, height: sizeInner }}
+            style={{
+                width: imageSize,
+                height: imageSize,
+                borderRadius: '50%',
+                overflow: 'hidden',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#f0f0f0',
+            }}
         >
-            <div
-                className={classNames('AvatarInner')}
-                style={{ width: sizeInner, height: sizeInner }}
-            >
-                {image && (
-                    <img
-                        className="AvatarFace"
-                        src={image}
-                        alt=""
-                        width={sizeInner}
-                        height={sizeInner}
-                    />
-                )}
-                {title && (
-                    <div className="AvatarFace" style={{ fontSize: sizeTitle }}>
-                        {title}
-                    </div>
-                )}
-                <div
-                    className="AvatarBorder"
-                    style={{ width: sizeWrapper, height: sizeWrapper }}
-                ></div>
-            </div>
+            <img
+                src={image}
+                alt="User Avatar"
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                }}
+            />
         </div>
     );
 };
+
+export default Avatar;

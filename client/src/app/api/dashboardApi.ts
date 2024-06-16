@@ -1,4 +1,4 @@
-import { DashboardInfo } from '../../pages/Dashboard';
+import { DashboardInfo } from '../../pages/dashoard/Dashboard';
 import { IUser } from '../../store/slices/authSlice';
 import { authApi } from './authApi';
 
@@ -37,6 +37,12 @@ export const dashboardApi = authApi.injectEndpoints({
                 };
             },
         }),
+        deleteUserImage: builder.mutation({
+            query: () => ({
+                url: `/api/dashboard/delete-image/${localStorage.getItem('user_id')}/`,
+                method: 'POST',
+            })
+        })
     }),
 });
 
@@ -45,4 +51,5 @@ export const {
     useGetUserQuery,
     useChangeUserDashboardInfoMutation,
     useUploadUserImageMutation,
+    useDeleteUserImageMutation,
 } = dashboardApi;
