@@ -1,14 +1,13 @@
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import Categories from './components/Categories/Categories';
-import Router from './routes/Router';
-import AuthModal from './components/Modals/AuthModal';
-import { BrowserRouter } from 'react-router-dom';
-import { useAppSelector } from './store/hooks';
-import { RootState } from './store/store';
-import { useAppDispatch } from './store/hooks';
+import 'App.css';
+import AuthModal from 'components/Modals/AuthModal/AuthModal';
 import { useEffect } from 'react';
+import { Outlet } from 'react-router';
+import Categories from './components/Categories/Categories';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { initializeAuth } from './store/slices/authSlice';
+import { RootState } from './store/store';
 
 const App: React.FC = () => {
     const { isOpen } = useAppSelector((state: RootState) => state.modal);
@@ -19,13 +18,17 @@ const App: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <BrowserRouter>
+        <>
             {isOpen && <AuthModal />}
             <Header />
+            <main>
             <Categories />
-            <Router />
+            <div id="detail">
+                <Outlet/>
+            </div>
+            </main>
             <Footer />
-        </BrowserRouter>
+        </>
     );
 };
 

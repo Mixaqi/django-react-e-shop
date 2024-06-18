@@ -1,12 +1,12 @@
-import { DashboardInfo } from '../../pages/dashoard/Dashboard';
+import { DashboardInfo } from '../../pages/dashboard/Dashboard';
 import { IUser } from '../../store/slices/authSlice';
 import { authApi } from './authApi';
 
 export const dashboardApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
-        getUserDashboardInfo: builder.query<DashboardInfo, number>({
-            query: (id: number) => ({
-                url: `/api/dashboard/${id}`,
+        getUserDashboardInfo: builder.query<DashboardInfo, void>({
+            query: () => ({
+                url: `/api/dashboard/me`,
                 method: 'GET',
             }),
         }),
@@ -18,10 +18,10 @@ export const dashboardApi = authApi.injectEndpoints({
         }),
         changeUserDashboardInfo: builder.mutation<
             DashboardInfo,
-            { id: number; fullName: string }
+            { fullName: string }
         >({
-            query: ({ id, fullName }) => ({
-                url: `/api/dashboard/${id}/`,
+            query: ({ fullName }) => ({
+                url: `/api/dashboard/update-user-data/`,
                 method: 'PATCH',
                 body: {
                     fullName,
@@ -31,7 +31,7 @@ export const dashboardApi = authApi.injectEndpoints({
         uploadUserImage: builder.mutation<{ image: string }, FormData>({
             query: (formData) => {
                 return {
-                    url: `/api/dashboard/upload-image/${localStorage.getItem('user_id')}/`,
+                    url: `/api/dashboard/upload-image/`,
                     method: 'POST',
                     body: formData,
                 };
@@ -39,10 +39,17 @@ export const dashboardApi = authApi.injectEndpoints({
         }),
         deleteUserImage: builder.mutation({
             query: () => ({
-                url: `/api/dashboard/delete-image/${localStorage.getItem('user_id')}/`,
+                url: `/api/dashboard/delete-image/`,
                 method: 'POST',
-            })
-        })
+            }),
+        }),
+        deleteUser: builder.mutation<void, { currentPassword: string }>({
+            query: ({ currentPassword }) => ({
+                url: `/api/auth/users/me/`,
+                method: 'DELETE',
+                body: { currentPassword },
+            }),
+        }),
     }),
 });
 
@@ -52,4 +59,5 @@ export const {
     useChangeUserDashboardInfoMutation,
     useUploadUserImageMutation,
     useDeleteUserImageMutation,
+    useDeleteUserMutation,
 } = dashboardApi;

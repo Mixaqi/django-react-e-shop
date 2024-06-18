@@ -1,16 +1,16 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAppSelector } from 'store/hooks';
+import { RootState } from 'store/store';
 
 interface PrivateRouteProps {
-    isAuthenticated?: string | null;
-    component: React.ComponentType<any>;
+    component: React.FC;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
     component: Component,
-    isAuthenticated,
 }) => {
-    isAuthenticated = localStorage.getItem('access');
+    const isAuthenticated = useAppSelector((state: RootState) => !!state.auth);
     if (isAuthenticated) {
         return <Component />;
     } else {

@@ -10,7 +10,7 @@ export const store = configureStore({
         modal: modalReducer,
         auth: authReducer,
         authApi: authApi.reducer,
-        dashboardApi: dashboardApi.reducer,
+        // dashboardApi: dashboardApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat([

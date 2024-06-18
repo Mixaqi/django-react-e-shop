@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     useGetUserDashboardInfoQuery,
     useChangeUserDashboardInfoMutation,
     useUploadUserImageMutation,
     useDeleteUserImageMutation,
+    useDeleteUserMutation,
 } from 'app/api/dashboardApi';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,7 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Avatar from 'components/Avatar/Avatar';
 import AnonymousAvatar from 'assets/cat_anon.webp';
-import './Dashboard.css'
+import './Dashboard.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
 
 export interface DashboardInfo {
     user: number;
@@ -22,14 +27,19 @@ export interface DashboardInfo {
 
 const Dashboard: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { data, error, isLoading, refetch } = useGetUserDashboardInfoQuery(
-        Number(id),
-    );
+    const { data, error, isLoading, refetch } = useGetUserDashboardInfoQuery();
     const [fullName, setFullName] = useState('');
     const [imageAvatar, setImage] = useState<File | null>(null);
     const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
     const [uploadUserImage] = useUploadUserImageMutation();
     const [deleteUserImage] = useDeleteUserImageMutation();
+    const [deleteUser] = useDeleteUserMutation();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const inputFile = useRef<HTMLInputElement | null>(null);
+
+    const toggleModal = (isOpen: boolean) => {
+        setIsModalOpen(isOpen);
+    };
 
     const MAX_FILE_SIZE = parseInt(
         process.env.REACT_APP_AVATAR_MAX_FILE_SIZE || '2097152',
@@ -54,7 +64,6 @@ const Dashboard: React.FC = () => {
         if (data) {
             try {
                 await changeUserDashboardInfo({
-                    id: Number(id),
                     fullName,
                 }).unwrap();
                 toast.success('Full name updated successfully');
@@ -127,7 +136,21 @@ const Dashboard: React.FC = () => {
             <ToastContainer />
             <div className="card my-5">
                 <div className="card-header">
-                    <h3>User Dashboard</h3>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h3>User Dashboard</h3>
+                        <button
+                            className="btn btn-danger"
+                            onClick={() => toggleModal(true)}
+                        >
+                            <FontAwesomeIcon icon={faTrash as IconProp} />
+                            Delete Account
+                        </button>
+                        {isModalOpen && (
+                            <UserDeletionModal
+                                closeModal={() => toggleModal(false)}
+                            />
+                        )}
+                    </div>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -136,6 +159,7 @@ const Dashboard: React.FC = () => {
                             <div className="mt-4">
                                 <input
                                     type="file"
+                                    // ref={inputFile}
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="form-control"

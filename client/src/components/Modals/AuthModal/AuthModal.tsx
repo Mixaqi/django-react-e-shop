@@ -1,11 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import Login from '../../pages/auth/Login';
-import Register from '../../pages/auth/Register';
-import { useAppSelector } from '../../store/hooks';
-import { closeModal, setModalMode } from '../../store/slices/modalSlice';
-import { AppDispatch } from '../../store/store';
+import Login from 'pages/auth/Login';
+import Register from 'pages/auth/Register';
+import { useAppSelector } from 'store/hooks';
+import { closeModal, setModalMode } from 'store/slices/modalSlice';
+import { AppDispatch } from 'store/store';
 import './AuthModal.css';
 
 const AuthModal: React.FC = () => {

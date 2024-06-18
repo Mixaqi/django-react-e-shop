@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Container, Nav, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { openModal } from '../../store/slices/modalSlice';
 import { logoutUser, selectAuth } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store/store';
-import "./Header.css";
+import './Header.css';
 
 const Header: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -13,52 +13,50 @@ const Header: React.FC = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(
         !!localStorage.getItem('access'),
     );
-    const navigate = useNavigate();
+    const [redirectToHome, setRedirectToHome] = useState(false);
+
 
     useEffect(() => {
         setIsLoggedIn(!!localStorage.getItem('access'));
+        setRedirectToHome(false);
     }, [user]);
 
     const handleLogout = () => {
         dispatch(logoutUser());
         setIsLoggedIn(false);
+        setRedirectToHome(true);
     };
 
-    const handleDashboardClick = () => {
-        const userId = localStorage.getItem('user_id');
-        if (userId) {
-            navigate(`/dashboard/${userId}`);
-        }
-    };
 
     return (
+        <>
+        {redirectToHome && <Navigate to="/" />}
         <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
-                <Navbar.Brand as={Link} to="/">
+                <Navbar.Brand as={NavLink} to="/">
                     Navbar
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">
+                        <Nav.Link as={NavLink} to="/">
                             Home
                         </Nav.Link>
-                        <Nav.Link as={Link} to="/about">
+                        <Nav.Link as={NavLink} to="/about">
                             About
                         </Nav.Link>
-                        <Nav.Link as={Link} to="/contacts">
+                        <Nav.Link as={NavLink} to="/contacts">
                             Contacts
                         </Nav.Link>
                     </Nav>
-                    <Nav className="ms-auto authButtons">
+                    <div className="header-auth-buttons">
                         {isLoggedIn ? (
                             <div className="header-auth-buttons">
-                                <Button
-                                    variant="outline-light"
-                                    onClick={handleDashboardClick}
-                                >
+                             <NavLink to="/dashboard" className="nav-link">
+                                <Button variant="outline-light">
                                     Dashboard
                                 </Button>
+                            </NavLink>
                                 <Button
                                     variant="outline-light"
                                     onClick={handleLogout}
@@ -67,7 +65,7 @@ const Header: React.FC = () => {
                                 </Button>
                             </div>
                         ) : (
-                            <>
+                            <div className="header-auth-buttons">
                                 <Button
                                     variant="outline-light"
                                     onClick={() =>
@@ -80,14 +78,15 @@ const Header: React.FC = () => {
                                     variant="outline-success"
                                     onClick={() => dispatch(openModal('login'))}
                                 >
-                                    Login
+                                    Log In
                                 </Button>
-                            </>
+                            </div>
                         )}
-                    </Nav>
+                        </div>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
+        </>
     );
 };
 

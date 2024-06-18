@@ -153,6 +153,9 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
     ),
+    # "DEFAULT_PERMISSION_CLASSES": (
+    #     "rest_framework.permissions.IsAuthenticated",
+    # ),
 }
 
 

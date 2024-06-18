@@ -1,10 +1,9 @@
-import React from 'react';
 import { Carousel } from 'react-bootstrap';
 
 const CategoriesSlider = () => {
     return (
         <Carousel>
-            <Carousel.Item style={{ height: '200px' }}>
+            <Carousel.Item style={{ height: '300px' }}>
                 <img
                     className="d-block w-100"
                     src="https://via.placeholder.com/800x200?text=GPU"
@@ -15,7 +14,7 @@ const CategoriesSlider = () => {
                     <p>Graphics Processing Unit</p>
                 </Carousel.Caption>
             </Carousel.Item>
-            <Carousel.Item style={{ height: '200px' }}>
+            <Carousel.Item style={{ height: '300px' }}>
                 <img
                     className="d-block w-100"
                     src="https://via.placeholder.com/800x200?text=CPU"
@@ -26,7 +25,7 @@ const CategoriesSlider = () => {
                     <p>Central Processing Unit</p>
                 </Carousel.Caption>
             </Carousel.Item>
-            <Carousel.Item style={{ height: '200px' }}>
+            <Carousel.Item style={{ height: '300px' }}>
                 <img
                     className="d-block w-100"
                     src="https://via.placeholder.com/800x200?text=RAM"

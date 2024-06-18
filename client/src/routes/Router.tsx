@@ -1,48 +1,93 @@
-import React from 'react';
-import About from '../pages/About';
-import Contacts from '../pages/Contacts';
-import Home from '../pages/Home';
-import Unauthorized from '../pages/auth/Unauthorized';
-import CPU from '../pages/hardware/CPU';
-import Cases from '../pages/hardware/Cases';
-import Cooling from '../pages/hardware/Cooling';
-import GPU from '../pages/hardware/GPU';
-import HDD from '../pages/hardware/HDD';
-import Motherboard from '../pages/hardware/Motherboard';
-import PSU from '../pages/hardware/PSU';
-import RAM from '../pages/hardware/RAM';
-import SSD from '../pages/hardware/SSD';
+import About from '../pages/About'
+import Contacts from '../pages/Contacts'
+import Home from '../pages/Home'
+import Unauthorized from '../pages/auth/Unauthorized'
+import CPU from '../pages/hardware/CPU'
+import Cases from '../pages/hardware/Cases'
+import Cooling from '../pages/hardware/Cooling'
+import GPU from '../pages/hardware/GPU'
+import HDD from '../pages/hardware/HDD'
+import Motherboard from '../pages/hardware/Motherboard'
+import PSU from '../pages/hardware/PSU'
+import RAM from '../pages/hardware/RAM'
+import SSD from '../pages/hardware/SSD'
+import App from 'App'
+import {
+    createBrowserRouter,
+} from 'react-router-dom'
+import NotFound from 'pages/NotFound'
+import Dashboard from 'pages/dashboard/Dashboard'
 
-import { Route, Routes } from 'react-router-dom';
-import NotFound from '../pages/NotFound';
-import Dashboard from '../pages/dashoard/Dashboard';
-import PrivateRoute from './PrivateRoute';
 
-const Router: React.FC = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/ssd" element={<SSD />} />
-            <Route path="/hdd" element={<HDD />} />
-            <Route path="/gpu" element={<GPU />} />
-            <Route path="/cpu" element={<CPU />} />
-            <Route path="/psu" element={<PSU />} />
-            <Route path="/ram" element={<RAM />} />
-            <Route path="/motherboard" element={<Motherboard />} />
-            <Route path="/cooling" element={<Cooling />} />
-            <Route path="/cases" element={<Cases />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route
-                // path="/dashboard"
-                path="/dashboard/:id"
-                element={<PrivateRoute component={Dashboard} />}
-            />
+export const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <App />,
+        errorElement: <NotFound />,
+        children: [
+            {
+                path: '',
+                element: <Home />,
+            },
+            {
+                path: 'about',
+                element: <About />,
+            },
+            {
+                path: 'contacts',
+                element: <Contacts/>
+            },
+            {
+                path: 'dashboard',
+                element: <Dashboard />
+            },
+            {
+                path: 'hardware',
+                children:[
+                    {
+                        path: 'cpu',
+                        element: <CPU />
+                    },
+                    {
+                        path: 'ssd',
+                        element: <SSD />
+                    },
+                    {
+                        path: 'hdd',
+                        element: <HDD />
+                    },
+                    {
+                        path: 'gpu',
+                        element: <GPU />
+                    },
+                    {
+                        path: 'psu',
+                        element: <PSU />
+                    },
+                    {
+                        path: 'ram',
+                        element: <RAM />
+                    },
+                    {
+                        path: 'motherboard',
+                        element: <Motherboard />
+                    },
+                    {
+                        path: 'cooling',
+                        element: <Cooling />
+                    },
+                    {
+                        path: 'cases',
+                        element: <Cases />
+                    }
 
-            <Route path="*" element={<NotFound />} />
-        </Routes>
-    );
-};
+                ]
+            },
+            {
+                path: "*",
+                element: <NotFound />
+            }
 
-export default Router;
+        ],
+    },
+])
