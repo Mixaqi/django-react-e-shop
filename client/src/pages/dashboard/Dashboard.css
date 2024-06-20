@@ -3,3 +3,9 @@
     flex-direction: row;
     gap: 10px;
 }
+
+.dashboard-logic-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}

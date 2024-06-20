@@ -22,10 +22,10 @@ const App: React.FC = () => {
             {isOpen && <AuthModal />}
             <Header />
             <main>
-            <Categories />
-            <div id="detail">
-                <Outlet/>
-            </div>
+                <Categories />
+                <div id="detail">
+                    <Outlet />
+                </div>
             </main>
             <Footer />
         </>

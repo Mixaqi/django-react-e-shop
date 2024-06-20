@@ -13,10 +13,11 @@ import Avatar from 'components/Avatar/Avatar';
 import AnonymousAvatar from 'assets/cat_anon.webp';
 import './Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faKey } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
 import Unauthorized from 'pages/auth/Unauthorized';
+import ChangePasswordForm from 'components/Forms/ChangePasswordForm';
 
 export interface DashboardInfo {
     user: number;
@@ -34,12 +35,15 @@ const Dashboard: React.FC = () => {
     const [uploadUserImage] = useUploadUserImageMutation();
     const [deleteUserImage] = useDeleteUserImageMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
 
     const toggleModal = (isOpen: boolean) => {
         setIsModalOpen(isOpen);
     };
 
+    const toggleChangePasswordForm = () => {
+        setShowChangePasswordForm((prevState) => !prevState);
+    };
 
     const MAX_FILE_SIZE = parseInt(
         process.env.REACT_APP_AVATAR_MAX_FILE_SIZE || '2097152',
@@ -108,18 +112,15 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         if (data) {
             setFullName(data.fullName || '');
-        }  
+        }
     }, [data]);
-
 
     if (isLoading) {
         return <div className="container">Loading...</div>;
     }
 
     if (error) {
-        return (
-            <Unauthorized />
-        );
+        return <Unauthorized />;
     }
 
     if (!data) {
@@ -137,13 +138,24 @@ const Dashboard: React.FC = () => {
                 <div className="card-header">
                     <div className="d-flex justify-content-between align-items-center">
                         <h3>User Dashboard</h3>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => toggleModal(true)}
-                        >
-                            <FontAwesomeIcon icon={faTrash as IconProp} />
-                            Delete Account
-                        </button>
+                        <div className="d-flex align-items-center">
+                            <div className="dashboard-logic-buttons">
+                                <button
+                                    className="btn btn-secondary ml-2"
+                                    onClick={() => toggleChangePasswordForm()}
+                                >
+                                    <FontAwesomeIcon icon={faKey as IconProp} />
+                                </button>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => toggleModal(true)}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faTrash as IconProp}
+                                    />
+                                </button>
+                            </div>
+                        </div>
                         {isModalOpen && (
                             <UserDeletionModal
                                 closeModal={() => toggleModal(false)}
@@ -232,6 +244,11 @@ const Dashboard: React.FC = () => {
                                     value={data.verified ? 'Yes' : 'No'}
                                     readOnly
                                 />
+                            </div>
+                            <div className="mb-3">
+                                {showChangePasswordForm && (
+                                    <ChangePasswordForm />
+                                )}
                             </div>
                         </div>
                     </div>

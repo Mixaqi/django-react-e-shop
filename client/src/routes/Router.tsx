@@ -1,23 +1,19 @@
-import About from '../pages/About'
-import Contacts from '../pages/Contacts'
-import Home from '../pages/Home'
-import Unauthorized from '../pages/auth/Unauthorized'
-import CPU from '../pages/hardware/CPU'
-import Cases from '../pages/hardware/Cases'
-import Cooling from '../pages/hardware/Cooling'
-import GPU from '../pages/hardware/GPU'
-import HDD from '../pages/hardware/HDD'
-import Motherboard from '../pages/hardware/Motherboard'
-import PSU from '../pages/hardware/PSU'
-import RAM from '../pages/hardware/RAM'
-import SSD from '../pages/hardware/SSD'
-import App from 'App'
-import {
-    createBrowserRouter,
-} from 'react-router-dom'
-import NotFound from 'pages/NotFound'
-import Dashboard from 'pages/dashboard/Dashboard'
-
+import About from '../pages/About';
+import Contacts from '../pages/Contacts';
+import Home from '../pages/Home';
+import CPU from '../pages/hardware/CPU';
+import Cases from '../pages/hardware/Cases';
+import Cooling from '../pages/hardware/Cooling';
+import GPU from '../pages/hardware/GPU';
+import HDD from '../pages/hardware/HDD';
+import Motherboard from '../pages/hardware/Motherboard';
+import PSU from '../pages/hardware/PSU';
+import RAM from '../pages/hardware/RAM';
+import SSD from '../pages/hardware/SSD';
+import App from 'App';
+import { createBrowserRouter } from 'react-router-dom';
+import NotFound from 'pages/NotFound';
+import Dashboard from 'pages/dashboard/Dashboard';
 
 export const router = createBrowserRouter([
     {
@@ -35,59 +31,57 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'contacts',
-                element: <Contacts/>
+                element: <Contacts />,
             },
             {
                 path: 'dashboard',
-                element: <Dashboard />
+                element: <Dashboard />,
             },
             {
                 path: 'hardware',
-                children:[
+                children: [
                     {
                         path: 'cpu',
-                        element: <CPU />
+                        element: <CPU />,
                     },
                     {
                         path: 'ssd',
-                        element: <SSD />
+                        element: <SSD />,
                     },
                     {
                         path: 'hdd',
-                        element: <HDD />
+                        element: <HDD />,
                     },
                     {
                         path: 'gpu',
-                        element: <GPU />
+                        element: <GPU />,
                     },
                     {
                         path: 'psu',
-                        element: <PSU />
+                        element: <PSU />,
                     },
                     {
                         path: 'ram',
-                        element: <RAM />
+                        element: <RAM />,
                     },
                     {
                         path: 'motherboard',
-                        element: <Motherboard />
+                        element: <Motherboard />,
                     },
                     {
                         path: 'cooling',
-                        element: <Cooling />
+                        element: <Cooling />,
                     },
                     {
                         path: 'cases',
-                        element: <Cases />
-                    }
-
-                ]
+                        element: <Cases />,
+                    },
+                ],
             },
             {
-                path: "*",
-                element: <NotFound />
-            }
-
+                path: '*',
+                element: <NotFound />,
+            },
         ],
     },
-])
+]);

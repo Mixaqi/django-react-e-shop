@@ -50,6 +50,20 @@ export const dashboardApi = authApi.injectEndpoints({
                 body: { currentPassword },
             }),
         }),
+        changeUserPassword: builder.mutation<
+            void,
+            {
+                newPassword: string;
+                reNewPassword: string;
+                currentPassword: string;
+            }
+        >({
+            query: ({ newPassword, reNewPassword, currentPassword }) => ({
+                url: `api/auth/users/set_password/`,
+                method: 'POST',
+                body: { newPassword, reNewPassword, currentPassword },
+            }),
+        }),
     }),
 });
 
@@ -60,4 +74,5 @@ export const {
     useUploadUserImageMutation,
     useDeleteUserImageMutation,
     useDeleteUserMutation,
+    useChangeUserPasswordMutation,
 } = dashboardApi;

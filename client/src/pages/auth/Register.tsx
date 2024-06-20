@@ -6,11 +6,10 @@ import { closeModal } from '../../store/slices/modalSlice';
 import { AppDispatch } from '../../store/store';
 import { useRegisterUserMutation } from '../../app/api/authApi';
 import { setUser } from '../../store/slices/authSlice';
+import { EMAIL_REGEX, PASSWORD_REGEX } from 'constants/regexs';
+import { passwordMatchValidator } from 'utils/passwordMatchValidator';
 
 const Register: React.FC = () => {
-    const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    const PASSWORD_REGEX =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
     const dispatch: AppDispatch = useDispatch();
     const [registerUser, { isLoading, isError }] = useRegisterUserMutation();
 
@@ -39,12 +38,6 @@ const Register: React.FC = () => {
         } catch (error) {
             console.error(error);
         }
-    };
-
-    const passwordMatchValidator = (confirmedPassword: string) => {
-        return (
-            confirmedPassword === watch('password') || 'Passwords should match!'
-        );
     };
 
     return (
@@ -109,7 +102,7 @@ const Register: React.FC = () => {
                             {...register('confirmedPassword', {
                                 required:
                                     'Confirmed password is required field!',
-                                validate: passwordMatchValidator,
+                                validate: passwordMatchValidator(watch),
                             })}
                             className="form-control"
                             type="password"
