@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useDeleteUserMutation } from 'app/api/dashboardApi';
 import { toast } from 'react-toastify';
+import { logoutUser } from 'store/slices/authSlice';
+import { useAppDispatch } from 'store/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     closeModal: () => void;
 }
 
 const UserDeletionModal: React.FC<Props> = ({ closeModal }) => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [deleteUser] = useDeleteUserMutation();
     const [currentPassword, setCurrentPassword] = useState('');
 
@@ -15,6 +20,9 @@ const UserDeletionModal: React.FC<Props> = ({ closeModal }) => {
         try {
             await deleteUser({ currentPassword }).unwrap();
             toast.success('User deleted successfully');
+            closeModal();
+            dispatch(logoutUser());
+            navigate('/');
         } catch (err) {
             toast.error('Failed to delete user');
         }

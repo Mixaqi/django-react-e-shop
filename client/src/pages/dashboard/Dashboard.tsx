@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     useGetUserDashboardInfoQuery,
     useChangeUserDashboardInfoMutation,
     useUploadUserImageMutation,
     useDeleteUserImageMutation,
-    useDeleteUserMutation,
 } from 'app/api/dashboardApi';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -17,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
+import Unauthorized from 'pages/auth/Unauthorized';
 
 export interface DashboardInfo {
     user: number;
@@ -33,13 +33,13 @@ const Dashboard: React.FC = () => {
     const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
     const [uploadUserImage] = useUploadUserImageMutation();
     const [deleteUserImage] = useDeleteUserImageMutation();
-    const [deleteUser] = useDeleteUserMutation();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const inputFile = useRef<HTMLInputElement | null>(null);
+
 
     const toggleModal = (isOpen: boolean) => {
         setIsModalOpen(isOpen);
     };
+
 
     const MAX_FILE_SIZE = parseInt(
         process.env.REACT_APP_AVATAR_MAX_FILE_SIZE || '2097152',
@@ -108,8 +108,9 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         if (data) {
             setFullName(data.fullName || '');
-        }
+        }  
     }, [data]);
+
 
     if (isLoading) {
         return <div className="container">Loading...</div>;
@@ -117,9 +118,7 @@ const Dashboard: React.FC = () => {
 
     if (error) {
         return (
-            <div className="container text-danger">
-                Error: {error.toString()}
-            </div>
+            <Unauthorized />
         );
     }
 
@@ -159,7 +158,6 @@ const Dashboard: React.FC = () => {
                             <div className="mt-4">
                                 <input
                                     type="file"
-                                    // ref={inputFile}
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="form-control"

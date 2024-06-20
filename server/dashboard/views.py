@@ -59,7 +59,7 @@ class DashboardViewSet(viewsets.ModelViewSet):
             instance = self.get_queryset().first()
             if instance is None:
                 raise NotFound("Dashboard instance not found")
-            
+
             file = request.FILES.get("image")
             if not file:
                 return Response(
@@ -72,9 +72,7 @@ class DashboardViewSet(viewsets.ModelViewSet):
             serializer = DashboardSerializer(instance)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except NotFound as e:
-            return Response(
-                {"error": str(e)}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error(f"Error uploading image: {e}")
             return Response(
@@ -82,19 +80,30 @@ class DashboardViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    @action(detail=True, methods=["post"], url_path="delete-image")
+    @action(detail=False, methods=["post"], url_path="delete-image")
     def delete_image(self, request: Request) -> Response:
         try:
-            instance = self.get_object()
+            instance = self.get_queryset().first()
+            if instance is None:
+                raise NotFound("Dashboard instance not found")
+
             if instance.image:
+
                 instance.image.delete()
-                instance.image = None
                 instance.save()
-            serializer = DashboardSerializer(instance)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Dashboard.DoesNotExist:
+                return Response(
+                    {"message": "Image deleted successfully"},
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(
+                    {"error": "No image to delete"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        except NotFound as e:
             return Response(
-                {"error": "Dashboard not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": str(e)},
+                status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as e:
             logger.error(f"Error deleting image: {e}")
