@@ -33,7 +33,6 @@ const ChangePasswordForm: React.FC = () => {
 
     return (
         <div className="container">
-
             <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
                 <div className="mb-3">
                     <input

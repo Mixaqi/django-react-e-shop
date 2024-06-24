@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from typing import Optional
-
-from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.request import Request
-from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
+from django.db.models import QuerySet
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
-from django.db.models import QuerySet
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from config.settings import logger
-
 
 from .models import Dashboard
 from .serializers import DashboardSerializer
@@ -42,7 +39,11 @@ class DashboardViewSet(viewsets.ModelViewSet):
     def partial_update(self, request: Request, *args, **kwargs) -> Response:
         try:
             instance = self.get_queryset().first()
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer = self.get_serializer(
+                instance,
+                data=request.data,
+                partial=True,
+            )
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             return Response(serializer.data)
@@ -63,12 +64,14 @@ class DashboardViewSet(viewsets.ModelViewSet):
             file = request.FILES.get("image")
             if not file:
                 return Response(
-                    {"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST
+                    {"error": "No image provided"},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             if instance.image:
                 instance.image.delete()
             instance.image = file
             instance.save()
+
             serializer = DashboardSerializer(instance)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except NotFound as e:

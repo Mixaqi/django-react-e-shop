@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from authentication.models import User
+from typing import Any
 
+from django.contrib.auth.models import update_last_login
+from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth.models import update_last_login
-from typing import Any
-from django.db import IntegrityError
+
+from authentication.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    image = serializers.CharField(source="dashboard.image", read_only=True)
-
     class Meta:
         model = User
         fields = [
@@ -19,9 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "is_active",
+            "is_verified",
             "created_at",
             "updated_at",
-            "image",
         ]
         read_only_fields = ["is_active", "created_at", "updated_at"]
 
@@ -43,9 +42,16 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 class RegisterSerializer(UserSerializer):
     password = serializers.CharField(
-        max_length=128, min_length=8, write_only=True, required=True
+        max_length=128,
+        min_length=8,
+        write_only=True,
+        required=True,
     )
-    email = serializers.EmailField(required=True, write_only=True, max_length=128)
+    email = serializers.EmailField(
+        required=True,
+        write_only=True,
+        max_length=128,
+    )
 
     class Meta:
         model = User
@@ -55,6 +61,7 @@ class RegisterSerializer(UserSerializer):
             "email",
             "password",
             "is_active",
+            "is_verified",
             "created_at",
             "updated_at",
         ]
@@ -63,5 +70,7 @@ class RegisterSerializer(UserSerializer):
         try:
             user = User.objects.create_user(**validated_data)
         except IntegrityError:
-            raise serializers.ValidationError({"email": "This email is already taken."})
+            raise serializers.ValidationError(
+                {"email": "This email is already taken."},
+            )
         return user

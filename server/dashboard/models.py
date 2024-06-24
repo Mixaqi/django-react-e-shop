@@ -12,7 +12,6 @@ class Dashboard(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=300)
     image = models.ImageField(null=True, blank=True, upload_to="user-avatars/")
-    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

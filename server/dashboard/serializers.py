@@ -9,4 +9,4 @@ class DashboardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dashboard
-        fields = ["user", "full_name", "is_verified", "image"]
+        fields = ["user", "full_name", "image"]

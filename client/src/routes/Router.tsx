@@ -14,6 +14,7 @@ import App from 'App';
 import { createBrowserRouter } from 'react-router-dom';
 import NotFound from 'pages/NotFound';
 import Dashboard from 'pages/dashboard/Dashboard';
+import VerifyEmail from 'pages/auth/VerifyEmail';
 
 export const router = createBrowserRouter([
     {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
                         element: <Cases />,
                     },
                 ],
+            },
+            {
+                path: 'verify-email/:userId/:token',
+                element: <VerifyEmail />,
             },
             {
                 path: '*',

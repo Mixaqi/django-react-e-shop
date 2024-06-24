@@ -15,8 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from authentication.serializers import LoginSerializer, RegisterSerializer
 from authentication.models import User
 from authentication.serializers import UserSerializer
-
-# from server.authentication import serializers
+from authentication.email_verification import send_verification_email
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -64,9 +63,9 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        send_verification_email(user)
         refresh = RefreshToken.for_user(user)
         res = {
             "refresh": str(refresh),

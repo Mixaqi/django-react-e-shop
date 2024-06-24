@@ -9,11 +9,15 @@ class ConvertCamelToSnake:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.method in ["POST", "PATCH", "PUT"] and self.is_json_request(request):
+        if request.method in ["POST", "PATCH", "PUT"] and self.is_json_request(
+            request
+        ):
             try:
                 data = json.loads(request.body)
                 if "fullName" in data and data["fullName"] == "":
-                    return JsonResponse({"message": "Failed from the middleware"})
+                    return JsonResponse(
+                        {"message": "Failed from the middleware"}
+                    )
                 data = self.convert_keys_to_snake_case(data)
                 request._body = json.dumps(data).encode("utf-8")
             except json.JSONDecodeError:
@@ -31,7 +35,9 @@ class ConvertCamelToSnake:
     ) -> Union[dict, list, Any]:
         if isinstance(data, dict):
             return {
-                self.camel_to_snake_case(key): self.convert_keys_to_snake_case(value)
+                self.camel_to_snake_case(key): self.convert_keys_to_snake_case(
+                    value
+                )
                 for key, value in data.items()
             }
         elif isinstance(data, list):

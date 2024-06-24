@@ -9,19 +9,17 @@ export interface IUser {
     username: string;
     email: string;
     isActive: boolean;
+    isVerified: boolean;
     createdAt: string;
     updatedAt: string;
-    dashboardId?: number;
 }
 
 export interface AuthState {
     user: IUser | null;
-    // isVerified: true | false;
 }
 
 const initialState: AuthState = {
     user: null,
-    // isVerified: false,
 };
 
 export const initializeAuth = createAsyncThunk(
@@ -31,7 +29,7 @@ export const initializeAuth = createAsyncThunk(
 
         if (userId) {
             const result = await dispatch(
-                dashboardApi.endpoints.getUser.initiate(Number(userId)),
+                dashboardApi.endpoints.getUser.initiate(),
             );
             if ('data' in result) {
                 const user = result.data as IUser;
@@ -68,11 +66,7 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        // setVerifyEmailStatus(state, action: PayloadAction<boolean>){
-        //   state.isVerified = action.payload;
-        // }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(setUser.fulfilled, (state, action) => {

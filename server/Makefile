@@ -1,4 +1,3 @@
-# Tests, linters & formatters
 fmt:
   make -k ruff-fmt black
 

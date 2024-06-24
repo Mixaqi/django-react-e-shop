@@ -1,6 +1,10 @@
-from django.urls import path, include
-from .views import UserViewSet
+from __future__ import annotations
 
+from django.urls import path
+
+from server.authentication.email_verification import verify_email
+
+from .views import UserViewSet
 
 app_name = "authentication"
 urlpatterns = [
@@ -9,8 +13,13 @@ urlpatterns = [
         UserViewSet.as_view(
             {
                 "get": "retrieve",
-            }
+            },
         ),
         name="user-info",
+    ),
+    path(
+        "verify-email/<int:user_id>/<str:token>/",
+        verify_email,
+        name="verify_email",
     ),
 ]

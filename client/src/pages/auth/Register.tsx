@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { RegistrationFormData } from './register.interface';
 import { useDispatch } from 'react-redux';
@@ -117,7 +117,7 @@ const Register: React.FC = () => {
                 </div>
                 {isError && (
                     <div className="alert alert-danger" role="alert">
-                        this email already taken
+                        This email is already taken
                     </div>
                 )}
 
@@ -127,7 +127,7 @@ const Register: React.FC = () => {
                         className="btn btn-primary"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Registration ...' : 'Register'}
+                        {isLoading ? 'Registering...' : 'Register'}
                     </button>
                 </div>
             </form>

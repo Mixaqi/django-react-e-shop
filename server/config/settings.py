@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import logging
 import os
 from datetime import timedelta
 from pathlib import Path
-import logging
 
 from dotenv import load_dotenv
 
@@ -12,9 +12,6 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 logger = logging.getLogger(__name__)
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
@@ -213,7 +210,7 @@ DJOSER = {
     "SERIALIZERS": {
         # "user_create": "account.serializers.UserCreateSerializer",
         # "user": "account.serializers.UserCreateSerializer",
-        "user_delete": "djoser.serializers.UserDeleteSerializer"
+        "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
 
@@ -223,3 +220,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
+
+PASSWORD_RESET_TIMEOUT = 900

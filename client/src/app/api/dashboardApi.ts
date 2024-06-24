@@ -10,9 +10,9 @@ export const dashboardApi = authApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        getUser: builder.query<IUser, number>({
-            query: (id: number) => ({
-                url: `/users/${id}`,
+        getUser: builder.query<IUser, void>({
+            query: () => ({
+                url: `/users/`,
                 method: 'GET',
             }),
         }),

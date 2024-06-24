@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'ui/Avatar/Avatar';
 import AnonymousAvatar from 'assets/cat_anon.webp';
 import './Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,17 +18,20 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
 import Unauthorized from 'pages/auth/Unauthorized';
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm';
+import Loader from 'ui/loaders/Loader';
+import { useAppSelector } from 'store/hooks';
+import { RootState } from 'store/store';
 
 export interface DashboardInfo {
     user: number;
     fullName?: string;
-    verified?: boolean;
+    isVerified?: boolean;
     image?: string | null;
 }
 
 const Dashboard: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const { data, error, isLoading, refetch } = useGetUserDashboardInfoQuery();
+    const { data, isError, refetch } = useGetUserDashboardInfoQuery();
     const [fullName, setFullName] = useState('');
     const [imageAvatar, setImage] = useState<File | null>(null);
     const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
@@ -40,6 +43,8 @@ const Dashboard: React.FC = () => {
     const toggleModal = (isOpen: boolean) => {
         setIsModalOpen(isOpen);
     };
+
+    const username = useAppSelector((state:RootState) => state.auth.user?.username)
 
     const toggleChangePasswordForm = () => {
         setShowChangePasswordForm((prevState) => !prevState);
@@ -115,16 +120,12 @@ const Dashboard: React.FC = () => {
         }
     }, [data]);
 
-    if (isLoading) {
-        return <div className="container">Loading...</div>;
-    }
-
-    if (error) {
+    if (isError) {
         return <Unauthorized />;
     }
 
     if (!data) {
-        return <div className="container">No data available</div>;
+        return <Loader />
     }
 
     const userImage = data.image
@@ -137,11 +138,11 @@ const Dashboard: React.FC = () => {
             <div className="card my-5">
                 <div className="card-header">
                     <div className="d-flex justify-content-between align-items-center">
-                        <h3>User Dashboard</h3>
+                        <h3>{username}</h3>
                         <div className="d-flex align-items-center">
                             <div className="dashboard-logic-buttons">
                                 <button
-                                    className="btn btn-secondary ml-2"
+                                    className="btn btn-secondary"
                                     onClick={() => toggleChangePasswordForm()}
                                 >
                                     <FontAwesomeIcon icon={faKey as IconProp} />
@@ -166,7 +167,7 @@ const Dashboard: React.FC = () => {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-md-4 text-center">
-                            <Avatar image={userImage} size={150} />
+                        <Avatar image={userImage} size={150} />
                             <div className="mt-4">
                                 <input
                                     type="file"
@@ -230,21 +231,7 @@ const Dashboard: React.FC = () => {
                                     </button>
                                 </div>
                             </div>
-                            <div className="mb-3">
-                                <label
-                                    htmlFor="verified"
-                                    className="form-label"
-                                >
-                                    Verified
-                                </label>
-                                <input
-                                    type="text"
-                                    id="verified"
-                                    className="form-control"
-                                    value={data.verified ? 'Yes' : 'No'}
-                                    readOnly
-                                />
-                            </div>
+
                             <div className="mb-3">
                                 {showChangePasswordForm && (
                                     <ChangePasswordForm />
