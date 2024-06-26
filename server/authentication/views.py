@@ -3,19 +3,22 @@ from __future__ import annotations
 from typing import Optional, Union
 
 from django.db.models.query import QuerySet
+from rest_framework import filters, status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import filters, status, viewsets
 from rest_framework.viewsets import ModelViewSet
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from authentication.serializers import LoginSerializer, RegisterSerializer
-from authentication.models import User
-from authentication.serializers import UserSerializer
 from authentication.email_verification import send_verification_email
+from authentication.models import User
+from authentication.serializers import (
+    LoginSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -26,7 +29,7 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = ["updated_at"]
     ordering = ["-updated_at"]
 
-    def get_queryset(self) -> Union[QuerySet[User], None]:
+    def get_queryset(self) -> Union[QuerySet[User],None]:
         queryset = User.objects.all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(id=self.request.user.id)

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../store';
 import Cookies from 'js-cookie';
-import { dashboardApi } from '../../app/api/dashboardApi';
 import { LoginResponse } from 'pages/auth/login.interface';
+import { RootState } from '../store';
+import { dashboardApi } from '../../app/api/dashboardApi';
 
 export interface IUser {
     id: number;
@@ -19,66 +19,66 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-    user: null,
+  user: null,
 };
 
 export const initializeAuth = createAsyncThunk(
-    'auth/initializeAuth',
-    async (_, { dispatch }) => {
-        const userId = localStorage.getItem('userId');
+  'auth/initializeAuth',
+  async (_, { dispatch }) => {
+    const userId = localStorage.getItem('userId');
 
-        if (userId) {
-            const result = await dispatch(
-                dashboardApi.endpoints.getUser.initiate(),
-            );
-            if ('data' in result) {
-                const user = result.data as IUser;
-                return { user };
-            }
-        }
+    if (userId) {
+      const result = await dispatch(
+        dashboardApi.endpoints.getUser.initiate(Number(userId)),
+      );
+      if ('data' in result) {
+        const user = result.data as IUser;
+        return { user };
+      }
+    }
 
-        return { user: null };
-    },
+    return { user: null };
+  },
 );
 
 export const setUser = createAsyncThunk(
-    'auth/setUser',
-    async ({ user, access, refresh }: LoginResponse) => {
-        localStorage.setItem('userId', user.id.toString());
-        localStorage.setItem('access', access);
-        Cookies.set('refresh', refresh, {
-            expires: 59,
-            path: '/',
-            secure: true,
-            sameSite: 'lax',
-        });
-        return { user };
-    },
+  'auth/setUser',
+  async ({ user, access, refresh }: LoginResponse) => {
+    localStorage.setItem('userId', user.id.toString());
+    localStorage.setItem('access', access);
+    Cookies.set('refresh', refresh, {
+      expires: 59,
+      path: '/',
+      secure: true,
+      sameSite: 'lax',
+    });
+    return { user };
+  },
 );
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('access');
-    Cookies.remove('refresh');
-    return;
+  localStorage.removeItem('userId');
+  localStorage.removeItem('access');
+  Cookies.remove('refresh');
+  return;
 });
 
 export const authSlice = createSlice({
-    name: 'auth',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(setUser.fulfilled, (state, action) => {
-                state.user = action.payload.user;
-            })
-            .addCase(logoutUser.fulfilled, (state) => {
-                state.user = null;
-            })
-            .addCase(initializeAuth.fulfilled, (state, action) => {
-                state.user = action.payload.user;
-            });
-    },
+  name: 'auth',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(setUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+      });
+  },
 });
 
 export const selectAuth = (state: RootState) => state.auth;

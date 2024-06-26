@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from rest_framework.routers import SimpleRouter
-from authentication.views import UserViewSet
+
 from authentication.views import (
     LoginViewSet,
-    RegistrationViewSet,
     RefreshViewSet,
+    RegistrationViewSet,
+    UserViewSet,
 )
-
 
 routes = SimpleRouter()
 

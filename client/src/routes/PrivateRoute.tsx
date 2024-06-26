@@ -8,14 +8,14 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
-    component: Component,
+  component: Component,
 }) => {
-    const isAuthenticated = useAppSelector((state: RootState) => !!state.auth);
-    if (isAuthenticated) {
-        return <Component />;
-    } else {
-        return <Navigate to="/unauthorized" />;
-    }
+  const isAuthenticated = useAppSelector((state: RootState) => !!state.auth);
+  if (isAuthenticated) {
+    return <Component />;
+  } else {
+    return <Navigate to="/unauthorized" />;
+  }
 };
 
 export default PrivateRoute;

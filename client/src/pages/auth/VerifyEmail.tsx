@@ -12,30 +12,26 @@ const VerifyEmail: React.FC = () => {
     if (userId && token) {
       verifyEmail({ userId: Number(userId), token })
         .unwrap()
-        .then(() => setMessage("Email verified successfully!"))
+        .then(() => setMessage('Email verified successfully!'))
         .catch((err) => {
           if (err.data && err.data.error) {
             setMessage(err.data.error);
           } else {
-            setMessage("An unexpected error occurred.");
+            setMessage('An unexpected error occurred.');
           }
         });
     }
   }, [userId, token, verifyEmail]);
 
   if (isLoading) {
-    <Loader />
+    <Loader />;
   }
 
   if (message) {
     return <div>{message}</div>;
   }
 
-  return (
-    <div>
-      VerifyEmail
-    </div>
-  );
+  return <div>VerifyEmail</div>;
 };
 
 export default VerifyEmail;
