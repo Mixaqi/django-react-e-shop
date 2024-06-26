@@ -25,16 +25,10 @@ const initialState: AuthState = {
 export const initializeAuth = createAsyncThunk(
   'auth/initializeAuth',
   async (_, { dispatch }) => {
-    const userId = localStorage.getItem('userId');
-
-    if (userId) {
-      const result = await dispatch(
-        dashboardApi.endpoints.getUser.initiate(Number(userId)),
-      );
-      if ('data' in result) {
-        const user = result.data as IUser;
-        return { user };
-      }
+    const result = await dispatch(dashboardApi.endpoints.getUser.initiate());
+    if ('data' in result) {
+      const user = result.data as IUser;
+      return { user }; 
     }
 
     return { user: null };
@@ -44,7 +38,7 @@ export const initializeAuth = createAsyncThunk(
 export const setUser = createAsyncThunk(
   'auth/setUser',
   async ({ user, access, refresh }: LoginResponse) => {
-    localStorage.setItem('userId', user.id.toString());
+    // localStorage.setItem('userId', user.id.toString());
     localStorage.setItem('access', access);
     Cookies.set('refresh', refresh, {
       expires: 59,
@@ -57,7 +51,7 @@ export const setUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
-  localStorage.removeItem('userId');
+  // localStorage.removeItem('userId');
   localStorage.removeItem('access');
   Cookies.remove('refresh');
   return;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   useGetUserDashboardInfoQuery,
   useChangeUserDashboardInfoMutation,
@@ -13,7 +13,7 @@ import Avatar from 'ui/Avatar/Avatar';
 import AnonymousAvatar from 'assets/cat_anon.webp';
 import './Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faKey, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
 import Unauthorized from 'pages/auth/Unauthorized';
@@ -21,6 +21,7 @@ import ChangePasswordForm from 'components/Forms/ChangePasswordForm';
 import Loader from 'ui/loaders/Loader';
 import { useAppSelector } from 'store/hooks';
 import { RootState } from 'store/store';
+import { useVerifyEmailMutation } from 'app/api/authApi';
 
 export interface DashboardInfo {
     user: number;
@@ -30,13 +31,14 @@ export interface DashboardInfo {
 }
 
 const Dashboard: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, token } = useParams<{ id: string, token: string }>();
   const { data, isError, refetch } = useGetUserDashboardInfoQuery();
   const [fullName, setFullName] = useState('');
   const [imageAvatar, setImage] = useState<File | null>(null);
   const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
   const [uploadUserImage] = useUploadUserImageMutation();
   const [deleteUserImage] = useDeleteUserImageMutation();
+  const [verifyEmail] = useVerifyEmailMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
 
@@ -48,9 +50,14 @@ const Dashboard: React.FC = () => {
     setIsModalOpen(isOpen);
   };
 
-  const username = useAppSelector(
-    (state: RootState) => state.auth.user?.username,
-  );
+  const user = useAppSelector((state: RootState) => state.auth.user);
+
+  const { username, isVerified } = useMemo(() => {
+    return {
+      username: user?.username,
+      isVerified: user?.isVerified,
+    };
+  }, [user]);
 
   const toggleChangePasswordForm = () => {
     setShowChangePasswordForm((prevState) => !prevState);
@@ -126,6 +133,19 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const handleVerifyEmail = async () => {
+    if (id && token) {
+      try {
+        await verifyEmail({ userId: Number(id), token });
+        toast.success('Email verification initiated successfully');
+      } catch (error) {
+        toast.error('Failed to initiate email verification');
+      }
+    } else {
+      toast.error('ID or token is missing');
+    }
+  };
+
   useEffect(() => {
     if (data) {
       setFullName(data.fullName || '');
@@ -153,6 +173,14 @@ const Dashboard: React.FC = () => {
             <h3>{username}</h3>
             <div className="d-flex align-items-center">
               <div className="dashboard-logic-buttons">
+                {!isVerified &&(
+                  <button
+                    className="btn btn-info"
+                    onClick={() => handleVerifyEmail()}
+                  >
+                    <FontAwesomeIcon icon={faEnvelope as IconProp} />
+                  </button>
+                )}
                 <button
                   className="btn btn-secondary"
                   onClick={() => toggleChangePasswordForm()}
@@ -167,6 +195,8 @@ const Dashboard: React.FC = () => {
                     icon={faTrash as IconProp}
                   />
                 </button>
+                   
+                  
               </div>
             </div>
             {isModalOpen && (
@@ -187,7 +217,6 @@ const Dashboard: React.FC = () => {
                   onChange={handleImageChange}
                   className="form-control"
                   ref={fileInputRef}
-                  value={fileInputValue}
                 />
                 <div className="image-interaction-buttons">
                   <button
@@ -195,14 +224,14 @@ const Dashboard: React.FC = () => {
                     onClick={handleImageUpload}
                     disabled={!imageAvatar}
                   >
-                                        Upload Image
+                      Upload Image
                   </button>
                   <button
                     className="btn btn-danger mt-2"
                     onClick={handleDeleteImage}
                     disabled={!data.image}
                   >
-                                        Delete Image
+                      Delete Image
                   </button>
                 </div>
               </div>
@@ -210,7 +239,7 @@ const Dashboard: React.FC = () => {
             <div className="col-md-8">
               <div className="mb-3">
                 <label htmlFor="userId" className="form-label">
-                                    User ID
+                    User ID
                 </label>
                 <input
                   type="text"
@@ -225,7 +254,7 @@ const Dashboard: React.FC = () => {
                   htmlFor="fullName"
                   className="form-label"
                 >
-                                    Full Name
+                    Full Name
                 </label>
                 <div className="input-group">
                   <input
@@ -241,11 +270,11 @@ const Dashboard: React.FC = () => {
                     onClick={handleFullNameUpdate}
                     disabled={!fullName}
                   >
-                                        Update
+                      Update
                   </button>
                 </div>
               </div>
-
+  
               <div className="mb-3">
                 {showChangePasswordForm && (
                   <ChangePasswordForm />
@@ -258,5 +287,5 @@ const Dashboard: React.FC = () => {
     </div>
   );
 };
-
+  
 export default Dashboard;

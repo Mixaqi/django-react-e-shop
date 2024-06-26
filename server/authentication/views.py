@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Optional
 
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
@@ -29,7 +29,7 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = ["updated_at"]
     ordering = ["-updated_at"]
 
-    def get_queryset(self) -> Union[QuerySet[User],None]:
+    def get_queryset(self) -> QuerySet[User]:
         queryset = User.objects.all()
         if not self.request.user.is_superuser:
             queryset = queryset.filter(id=self.request.user.id)
@@ -41,6 +41,15 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        queryset = self.filter_queryset(self.get_queryset())
+        if queryset.exists():
+            user = queryset.first()
+            serializer = self.get_serializer(user)
+            return Response(serializer.data)
+        else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 

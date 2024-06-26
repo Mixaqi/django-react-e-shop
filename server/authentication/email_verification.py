@@ -39,7 +39,10 @@ def verify_email(request: Request, user_id: int, token: str) -> Response:
 
     if user.is_verified:
         logger.error("Verification link already used")
-        return Response({"error": "Verification link has already been used or token has expired"}, status=400)
+        return Response(
+            {"error": "Verification link has already been used or token has expired"},
+            status=400,
+        )
 
     if default_token_generator.check_token(user, token):
         user.is_verified = True
@@ -49,5 +52,3 @@ def verify_email(request: Request, user_id: int, token: str) -> Response:
 
     logger.error("Invalid token")
     return Response({"error": "Token is invalid"}, status=400)
-
-#ПОФИКСИТЬ ДВОЙНУЮ ОТПРАВКУ, РАЗОБРАТЬСЯ С ИСТЕЧЕНИЕМ ТОКЕНА И ПОСЛЕДНИМ РЕТЕРНОМ В VERIFY_EMAIL. USEMEMO USECALLBACK + КЭШИРОВАНИЕ RTK

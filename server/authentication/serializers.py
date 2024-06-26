@@ -49,7 +49,6 @@ class RegisterSerializer(UserSerializer):
     )
     email = serializers.EmailField(
         required=True,
-        write_only=True,
         max_length=128,
     )
 

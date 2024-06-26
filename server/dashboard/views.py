@@ -20,7 +20,6 @@ class DashboardViewSet(viewsets.ModelViewSet):
     serializer_class = DashboardSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, JSONParser, FormParser]
-    # lookup_field = "id"
 
     def get_queryset(self) -> QuerySet[Dashboard]:
         return Dashboard.objects.filter(user=self.request.user)
@@ -83,7 +82,7 @@ class DashboardViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    @action(detail=False, methods=["post"], url_path="delete-image")
+    @action(detail=True, methods=["post"], url_path="delete-image")
     def delete_image(self, request: Request) -> Response:
         try:
             instance = self.get_queryset().first()

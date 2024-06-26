@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from dashboard.models import Dashboard
 from rest_framework import serializers
+
+from dashboard.models import Dashboard
 
 
 class DashboardSerializer(serializers.ModelSerializer):

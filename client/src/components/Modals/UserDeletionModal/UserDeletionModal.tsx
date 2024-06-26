@@ -19,7 +19,6 @@ const UserDeletionModal: React.FC<Props> = ({ closeModal }) => {
   const handleDeleteUser = async () => {
     try {
       await deleteUser({ currentPassword }).unwrap();
-      toast.success('User deleted successfully');
       closeModal();
       dispatch(logoutUser());
       navigate('/');
