@@ -7,8 +7,8 @@ import {
   useGetUserDashboardInfoQuery,
   useUploadUserImageMutation,
 } from 'app/api/dashboardApi';
-import { useVerifyEmailMutation } from 'app/api/authApi';
 import AnonymousAvatar from 'assets/cat_anon.webp';
+import { useVerifyEmailMutation } from 'app/api/authApi';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
@@ -22,6 +22,7 @@ import { RootState } from 'store/store';
 import Avatar from 'ui/Avatar/Avatar';
 import Loader from 'ui/loaders/Loader';
 import './Dashboard.css';
+import { useResendEmailVerificationMutation } from 'app/api/authApi';
 
 export interface DashboardInfo {
   user: number;
@@ -31,14 +32,13 @@ export interface DashboardInfo {
 }
 
 const Dashboard: React.FC = () => {
-  const { id, token } = useParams<{ id: string; token: string }>();
   const { data, isError, refetch } = useGetUserDashboardInfoQuery();
   const [fullName, setFullName] = useState('');
   const [imageAvatar, setImage] = useState<File | null>(null);
   const [changeUserDashboardInfo] = useChangeUserDashboardInfoMutation();
   const [uploadUserImage] = useUploadUserImageMutation();
   const [deleteUserImage] = useDeleteUserImageMutation();
-  const [verifyEmail] = useVerifyEmailMutation();
+  const [resendEmailVerification] = useResendEmailVerificationMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
   const handleDeleteImage = async () => {
     if (data && data.image) {
       try {
-        await deleteUserImage({ id: Number(id) }).unwrap();
+        await deleteUserImage().unwrap();
         toast.success('Image deleted successfully');
         refetch();
       } catch (err) {
@@ -128,16 +128,12 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleVerifyEmail = async () => {
-    if (id && token) {
-      try {
-        await verifyEmail({ userId: Number(id), token });
-        toast.success('Email verification initiated successfully');
-      } catch (error) {
-        toast.error('Failed to initiate email verification');
-      }
-    } else {
-      toast.error('ID or token is missing');
+  const handleResendEmailVerification = async () => {
+    try {
+      await resendEmailVerification();
+      toast.success('Email verification initiated successfully');
+    } catch (error) {
+      toast.error('Failed to initiate email verification');
     }
   };
 
@@ -167,7 +163,7 @@ const Dashboard: React.FC = () => {
             <div className='d-flex align-items-center'>
               <div className='dashboard-logic-buttons'>
                 {!isVerified && (
-                  <button className='btn btn-info' onClick={() => handleVerifyEmail()}>
+                  <button className='btn btn-info' onClick={() => handleResendEmailVerification()}>
                     <FontAwesomeIcon icon={faEnvelope as IconProp} />
                   </button>
                 )}

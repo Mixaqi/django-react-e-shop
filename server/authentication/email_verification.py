@@ -57,9 +57,11 @@ def verify_email(request: Request, user_id: int, token: str) -> Response:
 
 @api_view(["POST"])
 def resend_verification_email(request: Request) -> Response:
-    user_id = request.data.get("user_id")
+    user = request.user
+    if not user.is_authenticated:
+        return Response({"detail": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
     try:
-        user = User.objects.get(id=user_id)
         if user.is_verified:
             return Response(
                 {"detail": "User is already verified"},
@@ -71,5 +73,6 @@ def resend_verification_email(request: Request) -> Response:
             {"detail": "Verification email sent"},
             status=status.HTTP_200_OK,
         )
-    except User.DoesNotExist:
-        return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Failed to resend verification email: {str(e)}")
+        return Response({"detail": "Failed to resend verification email"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

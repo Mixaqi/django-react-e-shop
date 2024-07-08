@@ -38,7 +38,7 @@ export const dashboardApi = api.injectEndpoints({
         };
       },
     }),
-    deleteUserImage: builder.mutation({
+    deleteUserImage: builder.mutation<void, void>({
       query: () => ({
         url: '/api/dashboard/delete-image/',
         method: 'POST',

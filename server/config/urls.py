@@ -30,7 +30,7 @@ urlpatterns = [
         verify_email,
         name="verify_email",
     ),
-    path("api/resend-verification/", resend_verification_email, name="resend_verification_email"),
+    path("api/resend_verification/", resend_verification_email, name="resend_verification_email"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += routes.urls

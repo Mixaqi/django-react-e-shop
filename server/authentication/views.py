@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -35,7 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(id=self.request.user.id)
         return queryset
 
-    def retrieve(self, request: Request, pk: Optional[int] = None) -> Response:
+    def retrieve(self, request: Request, pk: int | None) -> Response:
         try:
             user = User.objects.get(pk=pk)
             serializer = UserSerializer(user)

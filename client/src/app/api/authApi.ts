@@ -36,7 +36,19 @@ export const authApi = api.injectEndpoints({
         auth: false,
       }),
     }),
+    resendEmailVerification: builder.mutation<void, void>({
+      query: () => ({
+        url: '/api/resend_verification/',
+        method: 'POST',
+        auth: true,
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation, useVerifyEmailMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useVerifyEmailMutation,
+  useResendEmailVerificationMutation,
+} = authApi;
