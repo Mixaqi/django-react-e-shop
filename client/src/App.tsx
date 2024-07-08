@@ -12,9 +12,7 @@ import { RootState } from './store/store';
 
 const App: React.FC = () => {
   const { isOpen } = useAppSelector((state: RootState) => state.modal);
-  const isVerified = useAppSelector(
-    (state: RootState) => state.auth.user?.isVerified,
-  );
+  const isVerified = useAppSelector((state: RootState) => state.auth.user?.isVerified);
   const dispatch = useAppDispatch();
   const [showNotification, setShowNotification] = useState(false);
 
@@ -35,12 +33,9 @@ const App: React.FC = () => {
       <main>
         <Categories />
         {showNotification && (
-          <Notification
-            message="Please verify your email address"
-            onClose={() => setShowNotification(false)}
-          />
+          <Notification message='Please verify your email address' onClose={() => setShowNotification(false)} />
         )}
-        <div id="detail">
+        <div id='detail'>
           <Outlet />
         </div>
       </main>

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from authentication.email_verification import verify_email
+from authentication.email_verification import resend_verification_email, verify_email
 
 from .routers import routes
 
@@ -30,6 +30,7 @@ urlpatterns = [
         verify_email,
         name="verify_email",
     ),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("api/resend-verification/", resend_verification_email, name="resend_verification_email"),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += routes.urls

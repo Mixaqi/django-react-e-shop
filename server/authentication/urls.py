@@ -17,9 +17,4 @@ urlpatterns = [
         ),
         name="user-info",
     ),
-    path(
-        "verify-email/<int:user_id>/<str:token>/",
-        verify_email,
-        name="verify_email",
-    ),
 ]

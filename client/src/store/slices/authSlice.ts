@@ -5,50 +5,44 @@ import { RootState } from '../store';
 import { dashboardApi } from '../../app/api/dashboardApi';
 
 export interface IUser {
-    id: number;
-    username: string;
-    email: string;
-    isActive: boolean;
-    isVerified: boolean;
-    createdAt: string;
-    updatedAt: string;
+  id: number;
+  username: string;
+  email: string;
+  isActive: boolean;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthState {
-    user: IUser | null;
+  user: IUser | null;
 }
 
 const initialState: AuthState = {
   user: null,
 };
 
-export const initializeAuth = createAsyncThunk(
-  'auth/initializeAuth',
-  async (_, { dispatch }) => {
-    const result = await dispatch(dashboardApi.endpoints.getUser.initiate());
-    if ('data' in result) {
-      const user = result.data as IUser;
-      return { user }; 
-    }
-
-    return { user: null };
-  },
-);
-
-export const setUser = createAsyncThunk(
-  'auth/setUser',
-  async ({ user, access, refresh }: LoginResponse) => {
-    // localStorage.setItem('userId', user.id.toString());
-    localStorage.setItem('access', access);
-    Cookies.set('refresh', refresh, {
-      expires: 59,
-      path: '/',
-      secure: true,
-      sameSite: 'lax',
-    });
+export const initializeAuth = createAsyncThunk('auth/initializeAuth', async (_, { dispatch }) => {
+  const result = await dispatch(dashboardApi.endpoints.getUser.initiate());
+  if ('data' in result) {
+    const user = result.data as IUser;
     return { user };
-  },
-);
+  }
+
+  return { user: null };
+});
+
+export const setUser = createAsyncThunk('auth/setUser', async ({ user, access, refresh }: LoginResponse) => {
+  // localStorage.setItem('userId', user.id.toString());
+  localStorage.setItem('access', access);
+  Cookies.set('refresh', refresh, {
+    expires: 59,
+    path: '/',
+    secure: true,
+    sameSite: 'lax',
+  });
+  return { user };
+});
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
   // localStorage.removeItem('userId');

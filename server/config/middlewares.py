@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import json
-from django.http import JsonResponse
 import re
-from typing import Union, Any
+from typing import Any, Union
+
+from django.http import JsonResponse
 
 
 class ConvertCamelToSnake:
@@ -10,13 +13,13 @@ class ConvertCamelToSnake:
 
     def __call__(self, request):
         if request.method in ["POST", "PATCH", "PUT"] and self.is_json_request(
-            request
+            request,
         ):
             try:
                 data = json.loads(request.body)
                 if "fullName" in data and data["fullName"] == "":
                     return JsonResponse(
-                        {"message": "Failed from the middleware"}
+                        {"message": "Failed from the middleware"},
                     )
                 data = self.convert_keys_to_snake_case(data)
                 request._body = json.dumps(data).encode("utf-8")
@@ -31,12 +34,13 @@ class ConvertCamelToSnake:
         return "application/json" in content_type
 
     def convert_keys_to_snake_case(
-        self, data: Union[dict, list, Any]
+        self,
+        data: Union[dict, list, Any],
     ) -> Union[dict, list, Any]:
         if isinstance(data, dict):
             return {
                 self.camel_to_snake_case(key): self.convert_keys_to_snake_case(
-                    value
+                    value,
                 )
                 for key, value in data.items()
             }

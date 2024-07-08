@@ -1,2 +1,1 @@
-export const togglePasswordVisibility = (prevShowPassword: boolean) =>
-  !prevShowPassword;
+export const togglePasswordVisibility = (prevShowPassword: boolean) => !prevShowPassword;

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ModalState {
-    isOpen: boolean;
-    mode: 'register' | 'login';
+  isOpen: boolean;
+  mode: 'register' | 'login';
 }
 
 const initialState: ModalState = {

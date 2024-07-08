@@ -5,6 +5,7 @@ import os
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from dotenv import load_dotenv
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -52,3 +53,23 @@ def verify_email(request: Request, user_id: int, token: str) -> Response:
 
     logger.error("Invalid token")
     return Response({"error": "Token is invalid"}, status=400)
+
+
+@api_view(["POST"])
+def resend_verification_email(request: Request) -> Response:
+    user_id = request.data.get("user_id")
+    try:
+        user = User.objects.get(id=user_id)
+        if user.is_verified:
+            return Response(
+                {"detail": "User is already verified"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        send_verification_email(user)
+        return Response(
+            {"detail": "Verification email sent"},
+            status=status.HTTP_200_OK,
+        )
+    except User.DoesNotExist:
+        return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)

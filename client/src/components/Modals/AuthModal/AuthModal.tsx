@@ -27,18 +27,18 @@ const AuthModal: React.FC = () => {
           <Modal.Title>Auth Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="modal-auth-buttons">
+          <div className='modal-auth-buttons'>
             <button
               className={`btn btn-outline-${mode === 'register' ? 'success' : 'primary'}`}
               onClick={() => togglePage('register')}
             >
-                            Sign Up
+              Sign Up
             </button>
             <button
               className={`btn btn-outline-${mode === 'login' ? 'success' : 'primary'}`}
               onClick={() => togglePage('login')}
             >
-                            Log In
+              Log In
             </button>
           </div>
           {mode === 'register' ? <Register /> : <Login />}

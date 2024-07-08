@@ -1,8 +1,6 @@
 import React from 'react';
 
-type Props = {};
-
-const Unauthorized = (props: Props) => {
+const Unauthorized = () => {
   return <div>Unauthorized</div>;
 };
 export default Unauthorized;

@@ -4,14 +4,13 @@ import { useChangeUserPasswordMutation } from 'app/api/dashboardApi';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 export interface ChangePasswordFormData {
-    newPassword: string;
-    reNewPassword: string;
-    currentPassword: string;
+  newPassword: string;
+  reNewPassword: string;
+  currentPassword: string;
 }
 
 const ChangePasswordForm: React.FC = () => {
-  const [changePassword, { isLoading, isError }] =
-        useChangeUserPasswordMutation();
+  const [changePassword, { isLoading, isError }] = useChangeUserPasswordMutation();
 
   const {
     register,
@@ -32,9 +31,9 @@ const ChangePasswordForm: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <div className="mb-3">
+    <div className='container'>
+      <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
+        <div className='mb-3'>
           <input
             {...register('currentPassword', {
               required: 'Enter a current password',
@@ -43,37 +42,28 @@ const ChangePasswordForm: React.FC = () => {
                 message: 'Current password is incorrect',
               },
             })}
-            className="form-control"
-            placeholder="Current password"
+            className='form-control'
+            placeholder='Current password'
           />
-          {errors?.currentPassword && (
-            <div className="text-danger">
-              {errors.currentPassword.message}
-            </div>
-          )}
+          {errors?.currentPassword && <div className='text-danger'>{errors.currentPassword.message}</div>}
         </div>
 
-        <div className="mb-3">
+        <div className='mb-3'>
           <input
             {...register('newPassword', {
               required: 'Enter a new password',
               pattern: {
                 value: PASSWORD_REGEX,
-                message:
-                                    'Password must contain digits, upper/lower case letters, and a special symbol',
+                message: 'Password must contain digits, upper/lower case letters, and a special symbol',
               },
             })}
-            className="form-control"
-            placeholder="New password"
+            className='form-control'
+            placeholder='New password'
           />
-          {errors?.newPassword && (
-            <div className="text-danger">
-              {errors.newPassword.message}
-            </div>
-          )}
+          {errors?.newPassword && <div className='text-danger'>{errors.newPassword.message}</div>}
         </div>
 
-        <div className="mb-3">
+        <div className='mb-3'>
           <input
             {...register('reNewPassword', {
               required: 'Repeat password',
@@ -82,29 +72,21 @@ const ChangePasswordForm: React.FC = () => {
                 message: 'Please enter a valid password',
               },
             })}
-            className="form-control"
-            placeholder="Repeat password"
+            className='form-control'
+            placeholder='Repeat password'
           />
-          {errors?.reNewPassword && (
-            <div className="text-danger">
-              {errors.reNewPassword.message}
-            </div>
-          )}
+          {errors?.reNewPassword && <div className='text-danger'>{errors.reNewPassword.message}</div>}
         </div>
 
-        <div className="mb-3">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isLoading}
-          >
+        <div className='mb-3'>
+          <button type='submit' className='btn btn-primary' disabled={isLoading}>
             {isLoading ? 'Changing password...' : 'Change Password'}
           </button>
         </div>
 
         {isError && (
-          <div className="alert alert-danger" role="alert">
-                        Failed to change password. Please try again.
+          <div className='alert alert-danger' role='alert'>
+            Failed to change password. Please try again.
           </div>
         )}
       </form>

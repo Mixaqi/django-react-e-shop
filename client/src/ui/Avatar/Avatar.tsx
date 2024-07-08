@@ -7,26 +7,21 @@ import { useAppSelector } from 'store/hooks';
 import { RootState } from 'store/store';
 
 interface AvatarProps {
-    image: string | null;
-    size: number;
+  image: string | null;
+  size: number;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ image, size }) => {
   const imageSize = `${size}px`;
-  const isVerified = useAppSelector(
-    (state: RootState) => state.auth.user?.isVerified,
-  );
+  const isVerified = useAppSelector((state: RootState) => state.auth.user?.isVerified);
 
   return (
-    <div className="Avatar" style={{ width: imageSize, height: imageSize }}>
-      <div
-        className="avatar-image-container"
-        style={{ position: 'relative' }}
-      >
+    <div className='Avatar' style={{ width: imageSize, height: imageSize }}>
+      <div className='avatar-image-container' style={{ position: 'relative' }}>
         <img
           src={image || 'default_image_url'}
-          alt="User Avatar"
-          className="rounded-circle"
+          alt='User Avatar'
+          className='rounded-circle'
           style={{
             width: imageSize,
             height: imageSize,
@@ -35,7 +30,7 @@ const Avatar: React.FC<AvatarProps> = ({ image, size }) => {
         />
 
         {isVerified && (
-          <span className="verified-badge">
+          <span className='verified-badge'>
             <FontAwesomeIcon
               icon={faCheckCircle as IconProp}
               style={{
@@ -45,7 +40,7 @@ const Avatar: React.FC<AvatarProps> = ({ image, size }) => {
                 fontSize: '21px',
               }}
             />
-            <span className="tooltip">Verified</span>
+            <span className='tooltip'>Verified</span>
           </span>
         )}
       </div>

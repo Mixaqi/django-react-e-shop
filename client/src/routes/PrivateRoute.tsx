@@ -4,17 +4,15 @@ import { useAppSelector } from 'store/hooks';
 import { RootState } from 'store/store';
 
 interface PrivateRouteProps {
-    component: React.FC;
+  component: React.FC;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({
-  component: Component,
-}) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component }) => {
   const isAuthenticated = useAppSelector((state: RootState) => !!state.auth);
   if (isAuthenticated) {
     return <Component />;
   } else {
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to='/unauthorized' />;
   }
 };
 

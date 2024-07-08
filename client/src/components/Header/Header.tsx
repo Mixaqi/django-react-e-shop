@@ -10,9 +10,7 @@ import './Header.css';
 const Header: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector(selectAuth);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem('access'),
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access'));
   const [redirectToHome, setRedirectToHome] = useState(false);
 
   useEffect(() => {
@@ -28,60 +26,42 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {redirectToHome && <Navigate to="/" />}
-      <Navbar bg="dark" variant="dark" expand="lg">
+      {redirectToHome && <Navigate to='/' />}
+      <Navbar bg='dark' variant='dark' expand='lg'>
         <Container>
-          <Navbar.Brand as={NavLink} to="/">
-                        Navbar
+          <Navbar.Brand as={NavLink} to='/'>
+            Navbar
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={NavLink} to="/">
-                                Home
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='me-auto'>
+              <Nav.Link as={NavLink} to='/'>
+                Home
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/about">
-                                About
+              <Nav.Link as={NavLink} to='/about'>
+                About
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/contacts">
-                                Contacts
+              <Nav.Link as={NavLink} to='/contacts'>
+                Contacts
               </Nav.Link>
             </Nav>
-            <div className="header-auth-buttons">
+            <div className='header-auth-buttons'>
               {isLoggedIn ? (
-                <div className="header-auth-buttons">
-                  <NavLink
-                    to="/dashboard"
-                    className="nav-link"
-                  >
-                    <Button variant="outline-light">
-                                            Dashboard
-                    </Button>
+                <div className='header-auth-buttons'>
+                  <NavLink to='/dashboard' className='nav-link'>
+                    <Button variant='outline-light'>Dashboard</Button>
                   </NavLink>
-                  <Button
-                    variant="outline-light"
-                    onClick={handleLogout}
-                  >
-                                        Logout
+                  <Button variant='outline-light' onClick={handleLogout}>
+                    Logout
                   </Button>
                 </div>
               ) : (
-                <div className="header-auth-buttons">
-                  <Button
-                    variant="outline-light"
-                    onClick={() =>
-                      dispatch(openModal('register'))
-                    }
-                  >
-                                        Sign Up
+                <div className='header-auth-buttons'>
+                  <Button variant='outline-light' onClick={() => dispatch(openModal('register'))}>
+                    Sign Up
                   </Button>
-                  <Button
-                    variant="outline-success"
-                    onClick={() =>
-                      dispatch(openModal('login'))
-                    }
-                  >
-                                        Log In
+                  <Button variant='outline-success' onClick={() => dispatch(openModal('login'))}>
+                    Log In
                   </Button>
                 </div>
               )}

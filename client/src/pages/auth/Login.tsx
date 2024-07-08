@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { useLoginUserMutation } from 'app/api/authApi';
+import { setUser } from '../../store/slices/authSlice';
 import { closeModal } from '../../store/slices/modalSlice';
 import { AppDispatch } from '../../store/store';
-import { useLoginUserMutation } from '../../app/api/authApi';
-import { setUser } from '../../store/slices/authSlice';
 import { LoginFormData } from './login.interface';
 
 const Login: React.FC = () => {
@@ -37,17 +37,15 @@ const Login: React.FC = () => {
     }
   };
 
-  const togglePasswordVisibility = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const togglePasswordVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <div className="mb-3 d-flex align-items-center">
+    <div className='container'>
+      <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
+        <div className='mb-3 d-flex align-items-center'>
           <input
             {...register('email', {
               required: 'Email is required',
@@ -56,48 +54,32 @@ const Login: React.FC = () => {
                 message: 'Invalid email address',
               },
             })}
-            type="email"
-            placeholder="Email"
-            className="form-control"
+            type='email'
+            placeholder='Email'
+            className='form-control'
           />
-          {errors.email && (
-            <div className="text-danger">
-              {errors.email.message}
-            </div>
-          )}
+          {errors.email && <div className='text-danger'>{errors.email.message}</div>}
         </div>
-        <div className="mb-3 d-flex align-items-center">
+        <div className='mb-3 d-flex align-items-center'>
           <input
             {...register('password', {
               required: 'Password is required',
             })}
             type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
-            className="form-control"
+            placeholder='Password'
+            className='form-control'
           />
-          {errors.password && (
-            <div className="text-danger">
-              {errors.password.message}
-            </div>
-          )}
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="password-toggle-button ms-2"
-          >
+          {errors.password && <div className='text-danger'>{errors.password.message}</div>}
+          <button type='button' onClick={togglePasswordVisibility} className='password-toggle-button ms-2'>
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </button>
         </div>
         {isError && (
-          <div className="alert alert-danger" role="alert">
-                        Сheck input data
+          <div className='alert alert-danger' role='alert'>
+            Сheck input data
           </div>
         )}
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={isLoading}
-        >
+        <button type='submit' className='btn btn-primary' disabled={isLoading}>
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
       </form>
