@@ -9,28 +9,25 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from authentication.email_verification import resend_verification_email, verify_email
-
-from .routers import routes
+from authentication.routers import routes
+from authentication.urls import urlpatterns as authentication_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include(("config.routers", "config"), namespace="config-api")),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path(
-        "api/token/refresh/",
-        TokenRefreshView.as_view(),
-        name="token_refresh",
-    ),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/dashboard/", include("dashboard.urls")),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
-    path(
-        "verify-email/<int:user_id>/<str:token>/",
-        verify_email,
-        name="verify_email",
-    ),
-    path("api/resend_verification/", resend_verification_email, name="resend_verification_email"),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += routes.urls
+urlpatterns += [
+    path("api/auth/", include((routes.urls, "authentication"), namespace="authentication-api-routes")),
+    *authentication_urls,
+]
+
+urlpatterns += [
+    path("api/auth/", include((authentication_urls, "authentication"), namespace="authentication-api-urls")),
+]
+
+urlpatterns += authentication_urls

@@ -44,9 +44,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "username",
-                    models.CharField(
-                        db_index=True, max_length=255, unique=True
-                    ),
+                    models.CharField(db_index=True, max_length=255, unique=True),
                 ),
                 (
                     "email",

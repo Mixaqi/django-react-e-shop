@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -17,6 +19,7 @@ from authentication.serializers import (
     RegisterSerializer,
     UserSerializer,
 )
+from config.settings import EMAIL_HOST_USER, logger
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -47,8 +50,7 @@ class UserViewSet(viewsets.ModelViewSet):
             user = queryset.first()
             serializer = self.get_serializer(user)
             return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class LoginViewSet(ModelViewSet, TokenObtainPairView):
@@ -95,7 +97,7 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
     permission_classes = (AllowAny,)
     http_method_names = ["post"]
 
-    def create(self, request, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
 
         try:
@@ -104,3 +106,65 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
             raise InvalidToken(e.args[0])
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+
+class ResetPasswordViewSet(viewsets.ViewSet, TokenRefreshView):
+    permission_classes = (AllowAny,)
+    http_method_names = ["post"]
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        email = request.data.get("email")
+        if email:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response(
+                    {"error": "User with this email does not exist"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            reset_code = self.generate_reset_token(user)
+            send_mail(
+                subject="Password reset",
+                message=f"Hi {user.username} This is your code to password reset: {reset_code}",
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[user.email],
+                fail_silently=True,
+            )
+            return Response({"reset_code": reset_code}, status=status.HTTP_200_OK)
+
+        return Response(
+            {"error": "Email field is required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def generate_reset_token(self, user: User) -> str:
+        token = default_token_generator.make_token(user)
+        return token[-6:]
+
+    def verify_reset_code(self, request: Request) -> Response:
+        reset_code = request.data.get("reset_code")
+        email = request.data.get("email")
+
+        if not reset_code or not email:
+            return Response(
+                {"error": "Email and reset_code fields are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User with this email does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if reset_code == self.generate_reset_token(user):
+            return Response(
+                {"message": "Reset code verified successfully"},
+                status=status.HTTP_200_OK,
+            )
+        logger.info(reset_code)
+        return Response(
+            {"error": "Invalid reset code"}, status=status.HTTP_400_BAD_REQUEST,
+        )

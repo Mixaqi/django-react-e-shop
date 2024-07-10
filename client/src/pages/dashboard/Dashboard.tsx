@@ -8,13 +8,11 @@ import {
   useUploadUserImageMutation,
 } from 'app/api/dashboardApi';
 import AnonymousAvatar from 'assets/cat_anon.webp';
-import { useVerifyEmailMutation } from 'app/api/authApi';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ChangePasswordForm from 'components/Forms/ChangePasswordForm';
 import UserDeletionModal from 'components/Modals/UserDeletionModal/UserDeletionModal';
 import Unauthorized from 'pages/auth/Unauthorized';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAppSelector } from 'store/hooks';

@@ -150,9 +150,6 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
         "djangorestframework_camel_case.parser.CamelCaseFormParser",
     ),
-    # "DEFAULT_PERMISSION_CLASSES": (
-    #     "rest_framework.permissions.IsAuthenticated",
-    # ),
 }
 
 
@@ -203,13 +200,10 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": True,
     "SEND_CONFIRMATION_EMAIL": True,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    "PASSWORD_RESET_CONFIRM_URL": "account/reset_password_confirm/{uid}/{token}",
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
     "TOKEN_MODEL": None,
     "SERIALIZERS": {
-        # "user_create": "account.serializers.UserCreateSerializer",
-        # "user": "account.serializers.UserCreateSerializer",
         "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
