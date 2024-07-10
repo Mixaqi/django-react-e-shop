@@ -17,17 +17,9 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/dashboard/", include("dashboard.urls")),
+    path("api/auth/routes/", include(routes.urls)),
+    path("api/auth/urls/", include(authentication_urls)),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-urlpatterns += [
-    path("api/auth/", include((routes.urls, "authentication"), namespace="authentication-api-routes")),
-    *authentication_urls,
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
-
-urlpatterns += [
-    path("api/auth/", include((authentication_urls, "authentication"), namespace="authentication-api-urls")),
-]
-
-urlpatterns += authentication_urls

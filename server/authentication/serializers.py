@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.contrib.auth.models import update_last_login
 from django.db import IntegrityError
@@ -13,7 +13,7 @@ from authentication.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
+        fields: ClassVar[list] = [
             "id",
             "username",
             "email",
@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["is_active", "created_at", "updated_at"]
+        read_only_fields: ClassVar[list] = ["is_active", "created_at", "updated_at"]
 
 
 class LoginSerializer(TokenObtainPairSerializer):
@@ -36,7 +36,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
 
-        update_last_login(None, self.user)
+        update_last_login(self.user,self.user)
         return data
 
 
@@ -54,7 +54,7 @@ class RegisterSerializer(UserSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields: ClassVar[list] = [
             "id",
             "username",
             "email",
@@ -65,11 +65,11 @@ class RegisterSerializer(UserSerializer):
             "updated_at",
         ]
 
-    def create(self, validated_data: dict[str, Any]) -> type[User]:
+    def create(self, validated_data: dict[str, Any]) -> User:
         try:
             user = User.objects.create_user(**validated_data)
-        except IntegrityError:
+        except IntegrityError as e:
             raise serializers.ValidationError(
                 {"email": "This email is already taken."},
-            )
+            ) from e
         return user

@@ -2,52 +2,41 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, Union
+from typing import Any, Callable
 
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse
 
 
 class ConvertCamelToSnake:
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         if request.method in ["POST", "PATCH", "PUT"] and self.is_json_request(
             request,
         ):
             try:
                 data = json.loads(request.body)
-                if "fullName" in data and data["fullName"] == "":
-                    return JsonResponse(
-                        {"message": "Failed from the middleware"},
-                    )
                 data = self.convert_keys_to_snake_case(data)
                 request._body = json.dumps(data).encode("utf-8")
             except json.JSONDecodeError:
                 pass
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
-    def is_json_request(self, request) -> bool:
+    def is_json_request(self, request: HttpRequest) -> bool:
         content_type = request.META.get("CONTENT_TYPE", "")
         return "application/json" in content_type
 
-    def convert_keys_to_snake_case(
-        self,
-        data: Union[dict, list, Any],
-    ) -> Union[dict, list, Any]:
+    def convert_keys_to_snake_case(self, data: dict | list | Any) -> dict | list | Any:
         if isinstance(data, dict):
             return {
-                self.camel_to_snake_case(key): self.convert_keys_to_snake_case(
-                    value,
-                )
+                self.camel_to_snake_case(key): self.convert_keys_to_snake_case(value)
                 for key, value in data.items()
             }
-        elif isinstance(data, list):
+        if isinstance(data, list):
             return [self.convert_keys_to_snake_case(item) for item in data]
-        else:
-            return data
+        return data
 
     def camel_to_snake_case(self, name: str) -> str:
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)

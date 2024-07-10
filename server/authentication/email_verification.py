@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from smtplib import SMTPException
 
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -18,7 +19,7 @@ load_dotenv()
 
 def send_verification_email(user: User) -> None:
     token = default_token_generator.make_token(user)
-    verification_link = f"{os.environ.get('HOST_1')}verify-email/{user.pk}/{token}/"
+    verification_link = f"{os.environ.get("REACT_HOST")}/verify-email/{user.pk}/{token}/"
     subject = "Verify your email address"
     message = f"Hi {user.username}, \nPlease click the link below to verify your email address:\n{verification_link}"
     send_mail(
@@ -31,7 +32,7 @@ def send_verification_email(user: User) -> None:
 
 
 @api_view(["POST"])
-def verify_email(user_id: int, token: str) -> Response:
+def verify_email(request: Request, user_id: int, token: str) -> Response:
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -76,7 +77,7 @@ def resend_verification_email(request: Request) -> Response:
             {"detail": "Verification email sent"},
             status=status.HTTP_200_OK,
         )
-    except Exception as e:
+    except SMTPException as e:
         logger.error(f"Failed to resend verification email: {e}")
         return Response(
             {"detail": "Failed to resend verification email"},

@@ -5,7 +5,7 @@ export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     loginUser: builder.mutation<{ access: string; refresh: string; user: IUser }, { email: string; password: string }>({
       query: ({ email, password }) => ({
-        url: '/api/auth/login/',
+        url: '/api/auth/routes/login/',
         method: 'POST',
         body: {
           email,
@@ -19,7 +19,7 @@ export const authApi = api.injectEndpoints({
       { username: string; email: string; password: string }
     >({
       query: ({ username, email, password }) => ({
-        url: '/api/auth/register/',
+        url: '/api/auth/routes/register/',
         method: 'POST',
         body: {
           username,
@@ -31,14 +31,14 @@ export const authApi = api.injectEndpoints({
     }),
     verifyEmail: builder.mutation<{ message: string }, { userId: number; token: string }>({
       query: ({ userId, token }) => ({
-        url: `/api/auth/verify-email/${userId}/${token}/`,
+        url: `/api/auth/urls/verify-email/${userId}/${token}/`,
         method: 'POST',
         auth: false,
       }),
     }),
     resendEmailVerification: builder.mutation<void, void>({
       query: () => ({
-        url: '/api/auth/resend_verification/',
+        url: '/api/auth/urls/resend_verification/',
         method: 'POST',
         auth: true,
       }),

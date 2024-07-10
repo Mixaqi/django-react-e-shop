@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -11,11 +13,7 @@ from django.db import models
 class UserManager(BaseUserManager):
 
     def create_user(
-        self,
-        username: str,
-        email: str,
-        password=None,
-        **kwargs,
+        self, username: str, email: str, password=None, **kwargs,
     ) -> type[User]:
         if username is None:
             raise TypeError("Users must have a username.")
@@ -34,12 +32,6 @@ class UserManager(BaseUserManager):
         email: str,
         password: str,
     ) -> type[User]:
-        if password is None:
-            raise TypeError("Superusers must have a password.")
-        if email is None:
-            raise TypeError("Superusers must have an email.")
-        if username is None:
-            raise TypeError("Superusers must have an username.")
 
         user = self.create_user(username, email, password)
         user.is_superuser = True
@@ -59,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS: ClassVar[list] = ["username"]
 
     objects = UserManager()
 

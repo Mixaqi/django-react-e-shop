@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import APIException, NotFound, ValidationError
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -18,24 +20,28 @@ from .serializers import DashboardSerializer
 class DashboardViewSet(viewsets.ModelViewSet):
     queryset = Dashboard.objects.all()
     serializer_class = DashboardSerializer
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, JSONParser, FormParser]
+    permission_classes: ClassVar[list] = [IsAuthenticated]
+    parser_classes: ClassVar[list] = [MultiPartParser, JSONParser, FormParser]
 
     def get_queryset(self) -> QuerySet[Dashboard]:
         return Dashboard.objects.filter(user=self.request.user)
 
-    def retrieve(self, request: Request, *args, **kwargs) -> Response:
+    def retrieve(self, request: Request) -> Response:
         try:
             dashboard = self.get_queryset().first()
             if not dashboard:
-                raise Dashboard.DoesNotExist
+                self.check_dashboard_exists()
             serializer = DashboardSerializer(dashboard)
             return Response(serializer.data)
         except Dashboard.DoesNotExist:
             logger.error(f"Dashboard not found for user {request.user.id}")
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def partial_update(self, request: Request, *args, **kwargs) -> Response:
+    def check_dashboard_exists(self) -> None:
+        raise Dashboard.DoesNotExist
+
+
+    def partial_update(self, request: Request) -> Response:
         try:
             instance = self.get_queryset().first()
             serializer = self.get_serializer(
@@ -49,9 +55,12 @@ class DashboardViewSet(viewsets.ModelViewSet):
         except Dashboard.DoesNotExist:
             logger.error(f"Dashboard with id {id} not found")
             return Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+        except ValidationError as e:
             logger.error(f"Error during partial update: {e}")
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(data=e.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            raise APIException from e
+
 
     @action(detail=True, methods=["post"], url_path="upload-image")
     def upload_image(self, request: Request) -> Response:
@@ -90,18 +99,18 @@ class DashboardViewSet(viewsets.ModelViewSet):
                 raise NotFound("Dashboard instance not found")
 
             if instance.image:
-
                 instance.image.delete()
                 instance.save()
                 return Response(
                     {"message": "Image deleted successfully"},
                     status=status.HTTP_200_OK,
                 )
-            else:
-                return Response(
-                    {"error": "No image to delete"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+
+            return Response(
+                {"error": "No image to delete"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         except NotFound as e:
             return Response(
                 {"error": str(e)},
