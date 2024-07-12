@@ -15,10 +15,6 @@ class UserManager(BaseUserManager):
     def create_user(
         self, username: str, email: str, password=None, **kwargs,
     ) -> type[User]:
-        if username is None:
-            raise TypeError("Users must have a username.")
-        if email is None:
-            raise TypeError("Users must have an email.")
 
         user = self.model(username=username, email=self.normalize_email(email))
         user.set_password(password)

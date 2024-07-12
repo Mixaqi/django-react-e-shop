@@ -8,10 +8,8 @@ export interface IUser {
   id: number;
   username: string;
   email: string;
-  isActive: boolean;
   isVerified: boolean;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface AuthState {
@@ -33,7 +31,6 @@ export const initializeAuth = createAsyncThunk('auth/initializeAuth', async (_, 
 });
 
 export const setUser = createAsyncThunk('auth/setUser', async ({ user, access, refresh }: LoginResponse) => {
-  // localStorage.setItem('userId', user.id.toString());
   localStorage.setItem('access', access);
   Cookies.set('refresh', refresh, {
     expires: 59,
@@ -44,8 +41,7 @@ export const setUser = createAsyncThunk('auth/setUser', async ({ user, access, r
   return { user };
 });
 
-export const logoutUser = createAsyncThunk('auth/logoutUser', async (_) => {
-  // localStorage.removeItem('userId');
+export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   localStorage.removeItem('access');
   Cookies.remove('refresh');
   return;

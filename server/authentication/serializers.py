@@ -17,10 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "email",
-            "is_active",
             "is_verified",
             "created_at",
-            "updated_at",
         ]
         read_only_fields: ClassVar[list] = ["is_active", "created_at", "updated_at"]
 
@@ -36,7 +34,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
 
-        update_last_login(self.user,self.user)
+        update_last_login(None,self.user)
         return data
 
 
@@ -59,10 +57,8 @@ class RegisterSerializer(UserSerializer):
             "username",
             "email",
             "password",
-            "is_active",
             "is_verified",
             "created_at",
-            "updated_at",
         ]
 
     def create(self, validated_data: dict[str, Any]) -> User:

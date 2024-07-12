@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import Any, ClassVar, Union
 
-from django.contrib.auth.hashers import make_password
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
 from rest_framework.exceptions import APIException
@@ -31,19 +30,12 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields: ClassVar[list[str]] = ["updated_at"]
     ordering: ClassVar[list[str]] = ["-updated_at"]
 
+
     def get_queryset(self) -> QuerySet[User]:
-        queryset = User.objects.all()
+        queryset = User.objects.values("id", "username", "email", "is_verified", "created_at")
         if not self.request.user.is_superuser:
             queryset = queryset.filter(id=self.request.user.id)
         return queryset
-
-    def retrieve(self, request: Request, pk: int | None) -> Response:
-        try:
-            user = User.objects.get(pk=pk)
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
@@ -52,7 +44,6 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
-
 
 class LoginViewSet(ModelViewSet, TokenObtainPairView):
     serializer_class = LoginSerializer

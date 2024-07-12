@@ -36,6 +36,9 @@ class DashboardViewSet(viewsets.ModelViewSet):
         except Dashboard.DoesNotExist:
             logger.error(f"Dashboard not found for user {request.user.id}")
             return Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Error while retrieving dashboard: {e!s}")
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def check_dashboard_exists(self) -> None:
         raise Dashboard.DoesNotExist
