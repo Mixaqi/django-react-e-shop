@@ -14,13 +14,28 @@ class TestAuthentication:
         return APIClient()
 
     @pytest.mark.django_db()
-    @pytest.mark.parametrize("username, email, password, expected_status", [
-        ("TypicalUserName@@$../n", "correctemailaddress@mail.ru", "typicalPassword", status.HTTP_201_CREATED),
-        ("None", "correctemailaddress@mail.ru", "typicalPassword", status.HTTP_201_CREATED),
-        ("ValidUsername", "invalidemail", "typicalPassword", status.HTTP_400_BAD_REQUEST),
-        ("ValidUsername", "correctemailaddress@mail.ru", "short", status.HTTP_400_BAD_REQUEST),
-    ])
-    def test_create_user(self, api_client: APIClient, username: str, email: str, password: str, expected_status) -> None:
+    @pytest.mark.parametrize(
+        "username, email, password, expected_status",
+        [
+            (
+                "TypicalUserName@@$../n",
+                "correctemailaddress@mail.ru",
+                "typicalPassword",
+                status.HTTP_201_CREATED,
+            ),
+            ("None", "correctemailaddress@mail.ru", "typicalPassword", status.HTTP_201_CREATED),
+            ("ValidUsername", "invalidemail", "typicalPassword", status.HTTP_400_BAD_REQUEST),
+            ("ValidUsername", "correctemailaddress@mail.ru", "short", status.HTTP_400_BAD_REQUEST),
+        ],
+    )
+    def test_create_user(
+        self,
+        api_client: APIClient,
+        username: str,
+        email: str,
+        password: str,
+        expected_status: int,
+    ) -> None:
         data = {
             "username": username,
             "email": email,

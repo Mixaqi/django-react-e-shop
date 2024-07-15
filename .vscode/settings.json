@@ -15,7 +15,7 @@
   "explorerExclude.backup": {},
   "python.analysis.typeCheckingMode": "basic",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "python.formatting.provider": "none",
   "python.testing.pytestArgs": [
