@@ -1,5 +1,5 @@
 import { IUser } from '../../store/slices/authSlice';
-import { api } from './rootApi';
+import { api, PasswordResetResponse } from './rootApi';
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -43,6 +43,22 @@ export const authApi = api.injectEndpoints({
         auth: true,
       }),
     }),
+    resetPassword: builder.mutation<PasswordResetResponse, { email: string }>({
+      query: (data) => ({
+        url: `api/auth/urls/reset_password/`,
+        method: 'POST',
+        body: data,
+        auth: false,
+      }),
+    }),
+    confirmResetPassword: builder.mutation<void, { token: string; newPassword: string }>({
+      query: (data) => ({
+        url: `api/auth/urls/reset_password/confirm/`,
+        method: 'POST',
+        body: data,
+        auth: false,
+      }),
+    }),
   }),
 });
 
@@ -51,4 +67,6 @@ export const {
   useRegisterUserMutation,
   useVerifyEmailMutation,
   useResendEmailVerificationMutation,
+  useResetPasswordMutation,
+  useConfirmResetPasswordMutation,
 } = authApi;

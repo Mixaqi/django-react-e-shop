@@ -37,10 +37,6 @@ const ChangePasswordForm: React.FC = () => {
           <input
             {...register('currentPassword', {
               required: 'Enter a current password',
-              pattern: {
-                value: PASSWORD_REGEX,
-                message: 'Current password is incorrect',
-              },
             })}
             className='form-control'
             placeholder='Current password'

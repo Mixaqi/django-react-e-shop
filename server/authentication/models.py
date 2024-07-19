@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from secrets import token_urlsafe
 from typing import ClassVar
 
 from django.contrib.auth.models import (
@@ -10,7 +11,6 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 
 
 class UserManager(BaseUserManager):
@@ -61,15 +61,28 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    token = models.CharField(max_length=100, default=get_random_string(32), unique=True)
+    token = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField(default=timezone.now() + timedelta(hours=1))
+    expires_at = models.DateTimeField()
 
     class Meta:
         db_table = "password_reset_token"
 
     def __str__(self) -> str:
         return f"{self.user} {self.token} {self.created_at} {self.expires_at}"
+
+    def save(self, *args, **kwargs) -> None:
+        if not self.token:
+            self.token = self.generate_unique_token()
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(minutes=10)
+        super().save(*args, **kwargs)
+
+    def generate_unique_token(self) -> str:
+        while True:
+            token = token_urlsafe(32)
+            if not PasswordResetToken.objects.filter(token=token).exists():
+                return token
 
     def is_valid(self) -> bool:
         return self.expires_at > timezone.now()

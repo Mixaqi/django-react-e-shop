@@ -4,7 +4,6 @@ from typing import ClassVar
 
 from django.core.mail import send_mail
 from django.db.models.query import QuerySet
-from django.utils.crypto import get_random_string
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
@@ -107,14 +106,13 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 
 class PasswordResetViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
-    http_method_names = ["post"]
+    http_method_names: ClassVar[list[str]] = ["post"]
 
     @action(detail=False, methods=["post"], url_path="reset")
     def reset_password(self, request: Request) -> Response:
         email = request.data.get("email")
         if not email:
             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -124,25 +122,30 @@ class PasswordResetViewSet(viewsets.ViewSet):
             )
 
         reset_token = PasswordResetToken.objects.create(user=user)
-        reset_link = f"{request.build_absolute_uri('/api/auth/urls/reset_password/confirm/')}?token={reset_token.token}"
         send_mail(
             "Password Reset Request",
-            f"Click the link to reset your password: {reset_link}",
+            f"Use the following code to reset password: {reset_token.token}",
             EMAIL_HOST_USER,
             [email],
             fail_silently=False,
         )
 
         return Response(
-            {"success": "A password reset link has been sent to your email"},
+            {"message": "Code was sent to your email"},
             status=status.HTTP_200_OK,
         )
 
     @action(detail=False, methods=["post"], url_path="confirm")
     def confirm_reset_password(self, request: Request) -> Response:
-        token = request.query_params.get("token")
+        token = request.data.get("token")
+        new_password = request.data.get("new_password")
+
         if not token:
-            return Response({"error": "Token is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "token is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not new_password:
+            return Response(
+                {"message": "new_password is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             reset_token = PasswordResetToken.objects.get(token=token)
@@ -152,21 +155,20 @@ class PasswordResetViewSet(viewsets.ViewSet):
         if not reset_token.is_valid():
             return Response({"error": "Token has expired"}, status=status.HTTP_400_BAD_REQUEST)
 
-        new_password = get_random_string(length=10)
         user = reset_token.user
         user.set_password(new_password)
         user.save()
         reset_token.delete()
 
         send_mail(
-            "Your new password",
-            f"Your new password is: {new_password}",
+            "Your password has been changed",
+            "Your password has been successfully changed.",
             EMAIL_HOST_USER,
             [user.email],
             fail_silently=False,
         )
 
         return Response(
-            {"success": "Your new password has been sent to your email"},
+            {"message": "Your password has been successfully changed"},
             status=status.HTTP_200_OK,
         )

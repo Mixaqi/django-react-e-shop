@@ -15,6 +15,8 @@ import Motherboard from '../pages/hardware/Motherboard';
 import PSU from '../pages/hardware/PSU';
 import RAM from '../pages/hardware/RAM';
 import SSD from '../pages/hardware/SSD';
+import ResetPassword from 'pages/auth/passwordReset/ResetPassword';
+import ResetPasswordSuccessful from 'pages/auth/passwordReset/ResetPasswordSuccessful';
 
 export const router = createBrowserRouter([
   {
@@ -82,6 +84,16 @@ export const router = createBrowserRouter([
       {
         path: 'verify-email/:userId/:token',
         element: <VerifyEmail />,
+      },
+      {
+        path: 'reset_password',
+        element: <ResetPassword />,
+        children: [
+          {
+            path: 'confirm',
+            element: <ResetPasswordSuccessful />,
+          },
+        ],
       },
       {
         path: '*',

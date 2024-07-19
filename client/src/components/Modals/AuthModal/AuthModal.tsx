@@ -22,20 +22,20 @@ const AuthModal: React.FC = () => {
 
   return (
     <div>
-      <Modal show={isOpen} onHide={handleClose}>
+      <Modal show={isOpen} onHide={handleClose} backdrop='static'>
         <Modal.Header closeButton>
           <Modal.Title>Auth Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className='modal-auth-buttons'>
             <button
-              className={`btn btn-outline-${mode === 'register' ? 'success' : 'primary'}`}
+              className={`btn btn-outline-${mode === 'register' ? 'primary' : 'primary'}`}
               onClick={() => togglePage('register')}
             >
               Sign Up
             </button>
             <button
-              className={`btn btn-outline-${mode === 'login' ? 'success' : 'primary'}`}
+              className={`btn btn-outline-${mode === 'login' ? 'primary' : 'primary'}`}
               onClick={() => togglePage('login')}
             >
               Log In

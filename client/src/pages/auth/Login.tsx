@@ -7,6 +7,8 @@ import { setUser } from '../../store/slices/authSlice';
 import { closeModal } from '../../store/slices/modalSlice';
 import { AppDispatch } from '../../store/store';
 import { LoginFormData } from './login.interface';
+import { NavLink } from 'react-router-dom';
+import { EMAIL_REGEX } from 'constants/regexs';
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -42,6 +44,10 @@ const Login: React.FC = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const handleForgotPasswordClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    dispatch(closeModal());
+  };
+
   return (
     <div className='container'>
       <form onSubmit={handleSubmit(onSubmit)} className='mt-4'>
@@ -50,7 +56,7 @@ const Login: React.FC = () => {
             {...register('email', {
               required: 'Email is required',
               pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                value: EMAIL_REGEX,
                 message: 'Invalid email address',
               },
             })}
@@ -79,9 +85,14 @@ const Login: React.FC = () => {
             Сheck input data
           </div>
         )}
-        <button type='submit' className='btn btn-primary' disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
+        <div className='d-flex flex-column align-items-start'>
+          <NavLink to='/reset_password' className='mb-3' onClick={handleForgotPasswordClick}>
+            Forgot password?
+          </NavLink>
+          <button type='submit' className='btn btn-primary' disabled={isLoading}>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+        </div>
       </form>
     </div>
   );
