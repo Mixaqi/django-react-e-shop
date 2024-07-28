@@ -5,11 +5,12 @@ from typing import ClassVar
 from django.core.mail import send_mail
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, throttle_classes
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -108,6 +109,7 @@ class PasswordResetViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     http_method_names: ClassVar[list[str]] = ["post"]
 
+    @throttle_classes(AnonRateThrottle)
     @action(detail=False, methods=["post"], url_path="reset")
     def reset_password(self, request: Request) -> Response:
         email = request.data.get("email")
@@ -144,7 +146,8 @@ class PasswordResetViewSet(viewsets.ViewSet):
             return Response({"message": "token is required"}, status=status.HTTP_400_BAD_REQUEST)
         if not new_password:
             return Response(
-                {"message": "new_password is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "new_password is required"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:

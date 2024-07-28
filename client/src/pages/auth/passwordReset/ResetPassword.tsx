@@ -36,7 +36,7 @@ const ResetPassword: React.FC = () => {
         toast.error(response.error);
       }
     } catch (err: any) {
-      const errorMessage = err?.data?.error || 'An error occurred';
+      const errorMessage = err?.data?.detail || 'An error occurred';
       toast.error(errorMessage);
     }
   };
