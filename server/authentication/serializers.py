@@ -24,7 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(TokenObtainPairSerializer):
-
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         data = super().validate(attrs)
 
@@ -34,7 +33,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
 
-        update_last_login(None,self.user)
+        update_last_login(None, self.user)
         return data
 
 
@@ -69,3 +68,4 @@ class RegisterSerializer(UserSerializer):
                 {"email": "This email is already taken."},
             ) from e
         return user
+

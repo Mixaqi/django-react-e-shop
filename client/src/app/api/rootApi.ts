@@ -85,3 +85,7 @@ const refreshToken = async () => {
     throw new Error(data.detail || 'Unable to refresh token');
   }
 };
+export interface PasswordResetResponse {
+  message?: string;
+  error?: string;
+}
