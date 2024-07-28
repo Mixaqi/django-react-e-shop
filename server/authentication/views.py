@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar, Union
+from typing import ClassVar
 
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets

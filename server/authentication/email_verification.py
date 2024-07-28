@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from smtplib import SMTPException
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from dotenv import load_dotenv
@@ -55,16 +56,9 @@ def verify_email(request: Request, user_id: int, token: str) -> Response:
     logger.error("Invalid token")
     return Response({"error": "Token is invalid"}, status=400)
 
-
 @api_view(["POST"])
 def resend_verification_email(request: Request) -> Response:
     user = request.user
-    if not user.is_authenticated:
-        return Response(
-            {"detail": "User is not authenticated"},
-            status=status.HTTP_401_UNAUTHORIZED,
-        )
-
     try:
         if user.is_verified:
             return Response(
