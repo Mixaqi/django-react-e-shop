@@ -10,7 +10,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import BaseThrottle
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -109,9 +109,14 @@ class PasswordResetViewSet(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     http_method_names: ClassVar[list[str]] = ["post"]
 
-    @throttle_classes(AnonRateThrottle)
+    def get_throttles(self) -> list[BaseThrottle]:
+        if self.action == "reset_password":
+            self.throttle_scope = "password_reset_email"
+        return super().get_throttles()
+
     @action(detail=False, methods=["post"], url_path="reset")
     def reset_password(self, request: Request) -> Response:
+        self.throttle_scope = "password_reset_email"
         email = request.data.get("email")
         if not email:
             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
