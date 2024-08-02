@@ -5,7 +5,7 @@ from typing import ClassVar
 from django.core.mail import send_mail
 from django.db.models.query import QuerySet
 from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action, throttle_classes
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request

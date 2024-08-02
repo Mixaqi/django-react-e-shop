@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # custom
     "authentication",
     "dashboard",
+    "products",
     # third party
     "corsheaders",
     "rest_framework",

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from typing import Any
 
 from authentication.models import User
 
@@ -15,12 +16,15 @@ class Dashboard(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return f"{self.user} {self.full_name}"
+
     @receiver(post_save, sender=User)
     def create_profile(
-        sender: Any, instance: User, created: bool, **kwargs: Any
+        sender: Any,
+        instance: User,
+        created: bool,
+        **kwargs: Any,
     ) -> None:
         if created:
             Dashboard.objects.create(user=instance)
-
-    def __str__(self) -> str:
-        return f"{self.user} {self.full_name}"
