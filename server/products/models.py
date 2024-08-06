@@ -94,8 +94,9 @@ class GraphicsCard(Product):
     def get_default_category(self) -> ProductCategory:
         try:
             return ProductCategory.objects.get(title="GPU")
-        except ProductCategory.DoesNotExist:
-            raise ValueError("Default category 'GPU' does not exist.")
+        except ProductCategory.DoesNotExist as err:
+            message = "Default category 'GPU' does not exist."
+            raise ValueError(message) from err
 
 
 class CPU(Product):
@@ -126,7 +127,7 @@ class SSD(Product):
     form_factor = models.CharField(max_length=15)
 
     class Meta:
-        db_table = "ssds"
+        db_table = "ssd"
 
 
 class HDD(Product):
@@ -140,7 +141,7 @@ class HDD(Product):
     form_factor = models.CharField(max_length=20)
 
     class Meta:
-        db_table = "hdds"
+        db_table = "hdd"
 
 
 class PSU(Product):
@@ -157,7 +158,7 @@ class PSU(Product):
     power_w = models.PositiveIntegerField()
 
     class Meta:
-        db_table = "psus"
+        db_table = "psu"
 
 
 class RAM(Product):
@@ -188,7 +189,7 @@ class RAM(Product):
     clock_frequency_mhz = models.IntegerField()
 
     class Meta:
-        db_table = "rams"
+        db_table = "ram"
 
 
 class Motherboard(Product):
@@ -225,7 +226,7 @@ class Cooling(Product):
     max_power_dissipation_w = models.PositiveIntegerField()
 
     class Meta:
-        db_table = "coolings"
+        db_table = "cooling"
 
 
 class Case(Product):
