@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const CPU = (props: Props) => {
+const CPU = () => {
   return <div>CPU</div>;
 };
 

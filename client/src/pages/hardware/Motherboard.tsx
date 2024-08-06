@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const Motherboard = (props: Props) => {
+const Motherboard = () => {
   return <div>Motherboard</div>;
 };
 

@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const RAM = (props: Props) => {
+const RAM = () => {
   return <div>RAM</div>;
 };
 

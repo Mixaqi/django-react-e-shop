@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const HDD = (props: Props) => {
+const HDD = () => {
   return <div>HDD</div>;
 };
 

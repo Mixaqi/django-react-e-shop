@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const GPU = (props: Props) => {
+const GPU = () => {
   return <div>GPU</div>;
 };
 

@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const Cases = (props: Props) => {
+const Cases = () => {
   return <div>Cases</div>;
 };
 

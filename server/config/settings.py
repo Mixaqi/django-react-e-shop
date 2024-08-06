@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "djangorestframework_camel_case",
     "djoser",
+    "django_json_widget",
 ]
 
 MIDDLEWARE = [

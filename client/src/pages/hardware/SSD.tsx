@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const SSD = (props: Props) => {
+const SSD = () => {
   return <div>SSD</div>;
 };
 

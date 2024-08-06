@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const Cooling = (props: Props) => {
+const Cooling = () => {
   return <div>Cooling</div>;
 };
 

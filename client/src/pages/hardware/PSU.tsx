@@ -1,8 +1,4 @@
-import React from 'react';
-
-type Props = {};
-
-const PSU = (props: Props) => {
+const PSU = () => {
   return <div>PSU</div>;
 };
 
