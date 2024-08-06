@@ -9,6 +9,13 @@ from django.utils.text import slugify
 from config.enums import ChoiceEnum
 
 
+def get_default_category(title: str) -> ProductCategory | None:
+    try:
+        return ProductCategory.objects.get(title=title)
+    except ProductCategory.DoesNotExist:
+        return None
+
+
 class OrderStatus(ChoiceEnum):
     PENDING = "pending"
     PROCESSING = "processing"
@@ -46,12 +53,11 @@ class Product(models.Model):
     available_in_stock = models.PositiveIntegerField(default=0)
     description = models.TextField()
     price = models.FloatField()
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
     image = models.ImageField(
         upload_to=product_image_upload_to,
         blank=True,
         null=True,
-        default="Unknown",
     )
     brand = models.CharField(max_length=50, default="Unknown")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -64,16 +70,21 @@ class Product(models.Model):
         verbose_name_plural = "products"
 
     def __str__(self) -> str:
-        return f"{self.title} {self.price}"
+        return f"{self.title} {self.price}$ {self.brand}"
 
     def save(self, *args, **kwargs) -> None:
         if not self.pk and not self.category_id:
-            self.category = self.get_default_category()
+            default_category = self.get_default_category()
+            if default_category:
+                self.category = default_category
+            else:
+                error_message = "Default category not set or not found."
+                raise ValueError(error_message)
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    def get_default_category(self) -> ProductCategory:
+    def get_default_category(self) -> ProductCategory | None:
         raise NotImplementedError
 
     def is_available(self) -> bool:
@@ -91,12 +102,8 @@ class GraphicsCard(Product):
     class Meta:
         db_table = "graphics_cards"
 
-    def get_default_category(self) -> ProductCategory:
-        try:
-            return ProductCategory.objects.get(title="GPU")
-        except ProductCategory.DoesNotExist as err:
-            message = "Default category 'GPU' does not exist."
-            raise ValueError(message) from err
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("GPU")
 
 
 class CPU(Product):
@@ -115,6 +122,9 @@ class CPU(Product):
     class Meta:
         db_table = "processors"
 
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("CPU")
+
 
 class SSD(Product):
     has_heatsink = models.BooleanField()
@@ -129,6 +139,9 @@ class SSD(Product):
     class Meta:
         db_table = "ssd"
 
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("SSD")
+
 
 class HDD(Product):
     shock_resistance_during_storage_g = models.PositiveIntegerField()
@@ -142,6 +155,9 @@ class HDD(Product):
 
     class Meta:
         db_table = "hdd"
+
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("HDD")
 
 
 class PSU(Product):
@@ -159,6 +175,9 @@ class PSU(Product):
 
     class Meta:
         db_table = "psu"
+
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("PSU")
 
 
 class RAM(Product):
@@ -191,6 +210,9 @@ class RAM(Product):
     class Meta:
         db_table = "ram"
 
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("RAM")
+
 
 class Motherboard(Product):
     INTEL: ClassVar[str] = "Intel"
@@ -215,6 +237,9 @@ class Motherboard(Product):
     class Meta:
         db_table = "motherboards"
 
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("Motherboard")
+
 
 class Cooling(Product):
     supported_sockets = models.JSONField(default=list, blank=True)
@@ -228,6 +253,9 @@ class Cooling(Product):
     class Meta:
         db_table = "cooling"
 
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("Cooling")
+
 
 class Case(Product):
     slots_2dot5_number = models.PositiveIntegerField()
@@ -239,25 +267,5 @@ class Case(Product):
     class Meta:
         db_table = "cases"
 
-
-class Order(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    total_sum = models.FloatField(default=0)
-    status = models.CharField(
-        max_length=20,
-        choices=OrderStatus.choices(),
-        default=OrderStatus.PENDING.value,
-    )
-    shipping_address = models.TextField()
-    payment_method = models.CharField(max_length=4, choices=PaymentMethod.choices())
-    discount = models.FloatField(default=0)
-    notes = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    products = models.ManyToManyField(Product)
-
-    class Meta:
-        db_table = "orders"
-
-    def __str__(self) -> str:
-        return f"{self.id} {self.total_sum} {self.created_at}"
+    def get_default_category(self) -> ProductCategory | None:
+        return get_default_category("Cases")
