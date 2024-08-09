@@ -17,6 +17,7 @@ import RAM from '../pages/hardware/RAM';
 import SSD from '../pages/hardware/SSD';
 import ResetPassword from 'pages/auth/passwordReset/ResetPassword';
 import ResetPasswordSuccessful from 'pages/auth/passwordReset/ResetPasswordSuccessful';
+import ProductList from 'components/ProductCards/ProductList';
 
 export const router = createBrowserRouter([
   {
@@ -52,8 +53,8 @@ export const router = createBrowserRouter([
             element: <SSD />,
           },
           {
-            path: 'hdd',
-            element: <HDD />,
+            path: 'hdd:/hdd',
+            element: <ProductList />,
           },
           {
             path: 'gpu',
@@ -76,10 +77,15 @@ export const router = createBrowserRouter([
             element: <Cooling />,
           },
           {
-            path: 'cases',
-            element: <Cases />,
+            path: 'cases/:cases',
+            // element: <Cases />,
+            element: <ProductList />,
           },
         ],
+      },
+      {
+        path: ':category',
+        element: <ProductList />,
       },
       {
         path: 'verify-email/:userId/:token',

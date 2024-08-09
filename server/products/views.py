@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from rest_framework import viewsets
 
+from .mixins import RetrieveBySlugMixin
 from .models import (
     CPU,
     HDD,
@@ -26,46 +27,46 @@ from .serializers import (
 )
 
 
-class GraphicsCardViewSet(viewsets.ModelViewSet):
+class GraphicsCardViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = GraphicsCard.objects.all()
     serializer_class = GraphicsCardSerializer
 
 
-class CPUViewSet(viewsets.ModelViewSet):
+class CPUViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = CPU.objects.all()
     serializer_class = CPUSerializer
 
 
-class SSDViewSet(viewsets.ModelViewSet):
+class SSDViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = SSD.objects.all()
     serializer_class = SSDSerializer
 
 
-class HDDViewSet(viewsets.ModelViewSet):
+class HDDViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = HDD.objects.all()
     serializer_class = HDDSerializer
 
 
-class PSUViewSet(viewsets.ModelViewSet):
+class PSUViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = PSU.objects.all()
     serializer_class = PSUSerializer
 
 
-class RAMViewSet(viewsets.ModelViewSet):
+class RAMViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = RAM.objects.all()
     serializer_class = RAMSerializer
 
 
-class MotherboardViewSet(viewsets.ModelViewSet):
+class MotherboardViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = Motherboard.objects.all()
     serializer_class = MotherboardSerializer
 
 
-class CoolingViewSet(viewsets.ModelViewSet):
+class CoolingViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = Cooling.objects.all()
     serializer_class = CoolingSerializer
 
 
-class CaseViewSet(viewsets.ModelViewSet):
+class CaseViewSet(RetrieveBySlugMixin, viewsets.ModelViewSet):
     queryset = Case.objects.all()
     serializer_class = CaseSerializer
